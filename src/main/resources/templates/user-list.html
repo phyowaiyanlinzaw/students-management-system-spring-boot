@@ -14,6 +14,7 @@
           href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
           rel="stylesheet"
   />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
 
   <link   href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
@@ -97,7 +98,16 @@
           columns: [
             { data: 'id'},
             { data: 'username'},
-            { data: 'enabled'}
+            {
+              data: 'enabled',
+                render: function(data, type, row) {
+                    if (data) {
+                    return '<span class="badge bg-success">Enabled</span>';
+                    } else {
+                    return '<span class="badge bg-danger">Disabled</span>';
+                    }
+                }
+            },
           ]
         });
       });
