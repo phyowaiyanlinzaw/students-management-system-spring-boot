@@ -38,9 +38,9 @@ public class CourseController {
         Course course = new Course();
         if (count < 1) {
             course.setCourseId("C001");
-        }else if (count < 10) {
+        }else if (count < 9) {
             course.setCourseId("C00" + (count + 1));
-        }else if(count < 100) {
+        }else if(count < 99) {
             course.setCourseId("C0" + (count + 1));
         }else{
             course.setCourseId("C" + (count + 1));
