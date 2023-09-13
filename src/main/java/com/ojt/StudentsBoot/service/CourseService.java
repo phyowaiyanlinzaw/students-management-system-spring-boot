@@ -40,7 +40,7 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
-    public DataTablesOutput<Course> findAll(DataTablesInput input){
+    public DataTablesOutput<Course> findAll(DataTablesInput input) {
         return courseRepository.findAll(input);
     }
 

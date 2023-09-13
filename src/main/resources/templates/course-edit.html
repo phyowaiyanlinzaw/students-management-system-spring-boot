@@ -61,6 +61,12 @@
                                     <input
                                             type="text"
                                             class="form-control"
+                                            hidden
+                                            th:field="*{id}"
+                                    />
+                                    <input
+                                            type="text"
+                                            class="form-control"
                                             id="floatingName"
                                             readonly
                                             th:field="*{courseId}"

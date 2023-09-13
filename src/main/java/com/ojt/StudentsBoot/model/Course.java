@@ -19,10 +19,14 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String courseName;
+
+    @Column(length = 1000)
     private String courseDescription;
     private String courseId;
     private Timestamp courseStartDate;
+    private boolean isDeleted;
 
     @ManyToMany(mappedBy = "courses")
     private List<Student> students = new ArrayList<>();

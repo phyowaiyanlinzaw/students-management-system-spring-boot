@@ -6,10 +6,12 @@ import com.ojt.StudentsBoot.model.User;
 import com.ojt.StudentsBoot.service.CourseService;
 import com.ojt.StudentsBoot.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -51,8 +53,16 @@ public class CourseController {
     }
 
     @PostMapping("/add")
-    public String courseAdd(@ModelAttribute Course course) {
-        courseService.save(course);
+    public String courseAdd(@ModelAttribute Course course, RedirectAttributes redirectAttributes) {
+        try{
+            course.setDeleted(false);
+            courseService.save(course);
+            redirectAttributes.addFlashAttribute("success", "courseAddSuccess");
+        }catch (DataIntegrityViolationException e){
+            redirectAttributes.addFlashAttribute("error", "courseDupe");
+            return "redirect:/course/add";
+        }
+
         return "redirect:/course/list";
     }
 
@@ -65,12 +75,18 @@ public class CourseController {
     }
 
     @PostMapping("/edit")
-    public String courseEdit(@ModelAttribute Course course) {
+    public String courseEdit(@ModelAttribute Course course,RedirectAttributes redirectAttributes) {
+        courseService.save(course);
+        redirectAttributes.addFlashAttribute("success", "courseEditSuccess");
         return "redirect:/course/list";
     }
 
-    @GetMapping("/delete")
-    public String courseDelete() {
+    @GetMapping("/delete/{id}")
+    public String courseDelete(RedirectAttributes redirectAttributes, @PathVariable Long id) {
+        Course course = courseService.findById(id);
+        course.setDeleted(true);
+        courseService.save(course);
+        redirectAttributes.addFlashAttribute("success", "courseDeleteSuccess");
         return "redirect:/course/list";
     }
 }

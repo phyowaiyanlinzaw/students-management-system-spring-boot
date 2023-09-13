@@ -53,7 +53,11 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Add Course Here</h5>
-
+                        <!-- Conditionally display alert -->
+                        <div th:if="${error eq 'courseDupe'}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            This course already exists!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                         <!-- Floating Labels Form -->
                         <form class="row g-3" th:object="${course}" th:action="@{/course/add}" method="post">
                             <div class="col-md-12">
@@ -75,6 +79,7 @@
                                             id="floatingEmail"
                                             placeholder="Course Name"
                                             th:field="*{courseName}"
+                                            required
                                     />
                                     <label for="floatingEmail">Course Name</label>
                                 </div>
@@ -87,6 +92,7 @@
                               id="floatingTextarea"
                               style="height: 100px"
                               th:field="*{courseDescription}"
+                                required
                       ></textarea>
                                     <label for="floatingTextarea">Course Description</label>
                                 </div>
@@ -94,6 +100,7 @@
                             <div class="col-12">
                                 <div class="col-sm-10">
                                     <select class="form-select" aria-label="Teacher select" th:field="*{teacher.id}"
+                                            required
                                     >
                                         <option th:each="t : ${teachers}" th:value="${t.id}" th:text="${t.username}"></option>
                                     </select>
@@ -120,4 +127,18 @@
 <!-- Template Main JS File -->
 <script src="/js/main.js"></script>
 </body>
+<!-- JavaScript to close the alert after 5 seconds -->
+<script>
+    /*<![CDATA[*/
+    $(document).ready(function () {
+        // Check if the alert is present and has the 'alert-danger' class
+        if ($('.alert.alert-danger').length) {
+            // Set a timeout to close the alert after 5 seconds (5000 milliseconds)
+            setTimeout(function () {
+                $('.alert.alert-danger').alert('close');
+            }, 5000);
+        }
+    });
+    /*]]>*/
+</script>
 </html>
