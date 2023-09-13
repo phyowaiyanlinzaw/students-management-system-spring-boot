@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <title>LOG IN</title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+            rel="stylesheet"
+    />
+
+    <link   href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Favicons -->
+    <link th:href="@{/images/favicon.png}" rel="icon">
+    <link th:href="@{/images/apple-touch-icon.png}" rel="apple-touch-icon">
+
+    <link
+            th:href="@{/vendor/bootstrap-icons/bootstrap-icons.css}"
+            rel="stylesheet"
+    />
+    <link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link href="/vendor/remixicon/remixicon.css" rel="stylesheet" />
+
+    <!-- Template Main CSS File -->
+    <link href="/css/style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center align-items-center vh-100">
+        <div class="col-4 rounded p-4" style=" color: #1e1b4b;">
+            <h1 class="display-6 text-center">LOG IN</h1>
+            <form th:action="@{/processLogin}" method="post" action="#">
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">
+                        [[${session['SPRING_SECURITY_LAST_EXCEPTION'].message}]]
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="username" name="username"
+                           placeholder="Enter Username"/>
+                    <label for="username" class="form-label" style="color: #1e1b4b">Enter
+                        Username</label>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="password" name="password"
+                                   placeholder="Enter Password"/>
+                            <label for="password" class="form-label" style="color: #1e1b4b">Password</label>
+                        </div>
+                        <button class="btn btn-outline-secondary" type="button" id="passwordToggle">
+                            <i id="passwordIcon" class="bi bi-eye-slash" style="color: #1e1b4b"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe"/>
+                            <label class="form-check-label" for="rememberMe">Remember Me</label>
+                        </div>
+                        <a href="" id="forget-password">Forgot Password?</a>
+                    </div>
+                </div>
+                <div class="col-6 d-grid gap-2 mx-auto">
+                    <button type="submit" class="btn btn-primary">LOG IN</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Vendor JS Files -->
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
+</body>
+</html>
