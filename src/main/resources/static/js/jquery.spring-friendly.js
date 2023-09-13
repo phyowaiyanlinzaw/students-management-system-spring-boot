@@ -1,6 +1,9 @@
 // From https://github.com/jquery/jquery/blob/master/src/serialize.js
 // Overrides data serialization to allow Spring MVC to correctly map input parameters : column[0][data] now becomes column[0].data
-(function ($) {
+(
+
+    function ($) {
+        $('.dataTables_paginate').addClass('btn btn-primary');
     var r20 = /%20/g, rbracket = /\[\]$/, rCRLF = /\r?\n/g, rsubmitterTypes = /^(?:submit|button|image|reset|file)$/i,
         rsubmittable = /^(?:input|select|textarea|keygen)/i;
 
@@ -72,3 +75,4 @@
         return s.join("&").replace(r20, "+");
     };
 })(jQuery);
+

@@ -8,10 +8,7 @@ import com.ojt.StudentsBoot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Arrays;
@@ -59,9 +56,12 @@ public class CourseController {
         return "redirect:/course/list";
     }
 
-    @GetMapping("/edit")
-    public ModelAndView courseEditView() {
-        return new ModelAndView("course-edit", "course", new Course());
+    @GetMapping("/edit/{id}")
+    public ModelAndView courseEditView(@PathVariable Long id, ModelMap model) {
+        Course course = courseService.findById(id);
+        List<User> teachers = userService.getUserByRole("TEACHER");
+        model.addAttribute("teachers", teachers);
+        return new ModelAndView("course-edit", "course", course);
     }
 
     @PostMapping("/edit")
