@@ -34,8 +34,12 @@
     <link href="/css/style.css" rel="stylesheet"/>
     <style>
         li.paginate_button {
-            background-color: #e03e2d !important;
-            color: white !important;
+            background-color: transparent !important;
+            color: black !important;
+        }
+        li.paginate_button.active {
+            background-color: transparent !important;
+            color: blue !important;
         }
     </style>
 </head>
@@ -91,7 +95,7 @@
                                 <th scope="col">Course Id</th>
                                 <th scope="col">Course Name</th>
                                 <th scope="col">Teacher</th>
-                                <th scope="col">Actions</th>
+                                <th scope="col">Edit</th>
                                 <th scope="col">Enabled</th>
                             </tr>
                             </thead>
@@ -144,10 +148,14 @@
                 {
                     data: 'disabled',
                     render: function (data, type, row) {
-                       const btn_class = data ? 'bi-check-circle-fill' : 'bi-x-circle-fill';
+                        // Determine the URL based on the value of 'data'
+                        const url = data ? '/course/enable/' : '/course/disable/';
 
-                        return '<i class="bi ' + btn_class + '"></i>';
+                        // Determine the icon class based on the value of 'data'
+                        const iconClass = data ? 'bi-check-circle-fill' : 'bi-x-circle-fill';
 
+                        // Create the anchor link with the determined URL and icon
+                        return '<a href="' + url + row.id + '"><i class="bi ' + iconClass + '"></i></a>';
                     }
                 }
             ]

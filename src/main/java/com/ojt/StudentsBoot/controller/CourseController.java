@@ -81,12 +81,21 @@ public class CourseController {
         return "redirect:/course/list";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/disable/{id}")
     public String courseDelete(RedirectAttributes redirectAttributes, @PathVariable Long id) {
         Course course = courseService.findById(id);
         course.setDisabled(true);
         courseService.save(course);
         redirectAttributes.addFlashAttribute("success", "courseDeleteSuccess");
+        return "redirect:/course/list";
+    }
+
+    @GetMapping("/enable/{id}")
+    public String courseEnable(RedirectAttributes redirectAttributes, @PathVariable Long id) {
+        Course course = courseService.findById(id);
+        course.setDisabled(false);
+        courseService.save(course);
+        redirectAttributes.addFlashAttribute("success", "courseEnableSuccess");
         return "redirect:/course/list";
     }
 }
