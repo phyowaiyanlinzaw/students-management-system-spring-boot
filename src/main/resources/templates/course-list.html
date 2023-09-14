@@ -152,10 +152,12 @@
                         const url = data ? '/course/enable/' : '/course/disable/';
 
                         // Determine the icon class based on the value of 'data'
-                        const iconClass = data ? 'bi-check-circle-fill' : 'bi-x-circle-fill';
+                        const bgClass = data ? ' bg-success' : ' bg-danger';
+
+                        const status = data ? 'Enable' : 'Disable';
 
                         // Create the anchor link with the determined URL and icon
-                        return '<a href="' + url + row.id + '"><i class="bi ' + iconClass + '"></i></a>';
+                        return '<a href="' + url + row.id + '"><span class="badge'+bgClass+'">' + status +'</span></a>';
                     }
                 }
             ]
