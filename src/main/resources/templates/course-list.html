@@ -83,7 +83,12 @@
                             Course added successfully!
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                        <div th:if="${success eq 'courseDeleteSuccess'}"
+                        <div th:if="${success eq 'courseDisableSuccess'}"
+                             class="alert alert-success alert-dismissible fade show" role="alert">
+                            Course deleted successfully!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div th:if="${success eq 'courseEnableSuccess'}"
                              class="alert alert-success alert-dismissible fade show" role="alert">
                             Course deleted successfully!
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

@@ -86,7 +86,7 @@ public class CourseController {
         Course course = courseService.findById(id);
         course.setDisabled(true);
         courseService.save(course);
-        redirectAttributes.addFlashAttribute("success", "courseDeleteSuccess");
+        redirectAttributes.addFlashAttribute("success", "courseDisableSuccess");
         return "redirect:/course/list";
     }
 

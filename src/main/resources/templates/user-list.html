@@ -61,6 +61,16 @@
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Users</h5>
+                <div th:if="${success eq 'userEnableSuccess'}"
+                     class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Success!</strong> User has been enabled.
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:if="${success eq 'courseDisableSuccess'}"
+                     class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Success!</strong> User has been disabled.
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
 
                 <!-- Table with stripped rows -->
                 <table class="display" id="users">
@@ -100,13 +110,18 @@
             { data: 'username'},
             {
               data: 'enabled',
-                render: function(data, type, row) {
-                    if (data) {
-                    return '<span class="badge bg-success">Enabled</span>';
-                    } else {
-                    return '<span class="badge bg-danger">Disabled</span>';
-                    }
-                }
+              render: function (data, type, row) {
+                // Determine the URL based on the value of 'data'
+                const url = data ? '/user/disable/' : '/user/enable/';
+
+                // Determine the icon class based on the value of 'data'
+                const bgClass = data ? ' bg-danger' : ' bg-success';
+
+                const status = data ? 'Disable' : 'Enable';
+
+                // Create the anchor link with the determined URL and icon
+                return '<a href="' + url + row.id + '"><span class="badge'+bgClass+'">' + status +'</span></a>';
+              }
             },
           ]
         });
