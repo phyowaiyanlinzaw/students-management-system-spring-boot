@@ -33,9 +33,9 @@
     <!-- Template Main CSS File -->
     <link href="/css/style.css" rel="stylesheet"/>
     <style>
-        li.paginate_button{
-            background-color: #e03e2d!important;
-            color: white!important;
+        li.paginate_button {
+            background-color: #e03e2d !important;
+            color: white !important;
         }
     </style>
 </head>
@@ -69,15 +69,18 @@
                     <div class="card-body">
                         <h5 class="card-title">Courses</h5>
                         <!-- Conditionally display alert -->
-                        <div th:if="${success eq 'courseEditSuccess'}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div th:if="${success eq 'courseEditSuccess'}"
+                             class="alert alert-success alert-dismissible fade show" role="alert">
                             Course edited successfully!
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                        <div th:if="${success eq 'courseAddSuccess'}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div th:if="${success eq 'courseAddSuccess'}"
+                             class="alert alert-success alert-dismissible fade show" role="alert">
                             Course added successfully!
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                        <div th:if="${success eq 'courseDeleteSuccess'}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div th:if="${success eq 'courseDeleteSuccess'}"
+                             class="alert alert-success alert-dismissible fade show" role="alert">
                             Course deleted successfully!
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
@@ -117,8 +120,8 @@
             scrollY: '50vh',
             serverSide: true,
             columns: [
-                { data: 'courseId' },
-                { data: 'courseName' },
+                {data: 'courseId'},
+                {data: 'courseName'},
                 {
                     data: 'teacher',
                     render: function (data, type, row) {
@@ -133,22 +136,18 @@
                     data: 'id', // You can set it to null as it's a custom column
                     render: function (data, type, row) {
                         if (type === 'display') {
-                                return '<a href="/course/edit/' + data + '"><i class="bi bi-pencil-fill edit-icon"></i></a>';
+                            return '<a href="/course/edit/' + data + '"><i class="bi bi-pencil-fill edit-icon"></i></a>';
                         }
                         return '';
                     }
                 },
                 {
-                    data: 'isDeleted',
+                    data: 'disabled',
                     render: function (data, type, row) {
-                        if (type === 'display') {
-                            if (data === false) {
-                                return '<i class="bi bi-check-circle-fill disabled-icon"></i>';
-                            } else {
-                                return '<i class="bi bi-x-circle-fill enabled-icon"></i>';
-                            }
-                        }
-                        return data;
+                       const btn_class = data ? 'bi-check-circle-fill' : 'bi-x-circle-fill';
+
+                        return '<i class="bi ' + btn_class + '"></i>';
+
                     }
                 }
             ]

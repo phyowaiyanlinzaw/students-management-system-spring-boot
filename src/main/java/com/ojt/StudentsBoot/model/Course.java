@@ -26,7 +26,7 @@ public class Course {
     private String courseDescription;
     private String courseId;
     private Timestamp courseStartDate;
-    private boolean isDeleted;
+    private boolean disabled;
 
     @ManyToMany(mappedBy = "courses")
     private List<Student> students = new ArrayList<>();

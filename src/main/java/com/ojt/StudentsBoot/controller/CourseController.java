@@ -55,7 +55,7 @@ public class CourseController {
     @PostMapping("/add")
     public String courseAdd(@ModelAttribute Course course, RedirectAttributes redirectAttributes) {
         try{
-            course.setDeleted(false);
+            course.setDisabled(false);
             courseService.save(course);
             redirectAttributes.addFlashAttribute("success", "courseAddSuccess");
         }catch (DataIntegrityViolationException e){
@@ -84,7 +84,7 @@ public class CourseController {
     @GetMapping("/delete/{id}")
     public String courseDelete(RedirectAttributes redirectAttributes, @PathVariable Long id) {
         Course course = courseService.findById(id);
-        course.setDeleted(true);
+        course.setDisabled(true);
         courseService.save(course);
         redirectAttributes.addFlashAttribute("success", "courseDeleteSuccess");
         return "redirect:/course/list";
