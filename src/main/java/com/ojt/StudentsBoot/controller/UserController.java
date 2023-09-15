@@ -3,6 +3,7 @@ package com.ojt.StudentsBoot.controller;
 import com.ojt.StudentsBoot.model.User;
 import com.ojt.StudentsBoot.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +28,18 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public String processUserAdd(){
-        return "redirect:/user/list";
+    public String processUserAdd(
+            @ModelAttribute("user") User user,
+            RedirectAttributes redirectAttributes
+    ){
+        try{
+            userService.save(user);
+            System.out.println(user.getName());
+            redirectAttributes.addFlashAttribute("success", "userAddSuccess");
+        }catch (DataIntegrityViolationException e){
+            redirectAttributes.addFlashAttribute("error", "userDupe");
+        }
+            return "redirect:/user/list";
     }
 
     @GetMapping("/edit")
@@ -63,5 +74,10 @@ public class UserController {
         userService.save(user);
         redirectAttributes.addFlashAttribute("success", "userEnableSuccess");
         return "redirect:/user/list";
+    }
+
+    @GetMapping("/profile")
+    public ModelAndView profileView(){
+        return new ModelAndView("user-profile","user",new User());
     }
 }

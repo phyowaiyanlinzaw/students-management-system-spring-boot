@@ -25,6 +25,7 @@ public class CourseService {
 
     public void save(Course course){
         course.setCourseStartDate(new Timestamp(System.currentTimeMillis()));
+        course.setDisabled(false);
         courseRepository.save(course);
     }
 

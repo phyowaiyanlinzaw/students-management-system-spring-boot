@@ -1,10 +1,187 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+    <title>Add User | Students Management System</title>
+    <meta content="" name="description"/>
+    <meta content="" name="keywords"/>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link
+            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+            rel="stylesheet"
+    />
+
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Favicons -->
+    <link th:href="@{/images/favicon.png}" rel="icon">
+    <link th:href="@{/images/apple-touch-icon.png}" rel="apple-touch-icon">
+
+    <link
+            th:href="@{/vendor/bootstrap-icons/bootstrap-icons.css}"
+            rel="stylesheet"
+    />
+    <link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"/>
+    <link href="/vendor/remixicon/remixicon.css" rel="stylesheet"/>
+
+    <!-- Template Main CSS File -->
+    <link href="/css/style.css" rel="stylesheet"/>
 </head>
 <body>
+<!-- ======= Header ======= -->
+<div th:replace="fragments/header :: header"></div>
+<div th:replace="fragments/sidebar :: #sidebar"></div>
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Profile</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item">Users</li>
+                <li class="breadcrumb-item active">Add</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- End Page Title -->
 
+    <section class="section profile">
+        <div class="row">
+            <div class="col-xl-4">
+                <div class="card">
+                    <div
+                            class="card-body profile-card pt-4 d-flex flex-column align-items-center"
+                    >
+                        <img
+                                src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                                alt="Profile"
+                                class="rounded-circle"
+                                width="150"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-8">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <div class="tab-content pt-2">
+                                <!-- Profile Edit Form -->
+                                <form th:action="@{/user/add}" method="post">
+
+                                    <div class="row mb-3">
+                                        <label
+                                                for="name"
+                                                class="col-md-4 col-lg-3 col-form-label"
+                                        >Full Name</label
+                                        >
+                                        <div class="col-md-8 col-lg-9">
+                                            <input
+                                                    name="name"
+                                                    type="text"
+                                                    class="form-control"
+                                                    id="name"
+                                                    placeholder="Full Name"
+                                                    required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label
+                                                for="username"
+                                                class="col-md-4 col-lg-3 col-form-label"
+                                        >Username</label
+                                        >
+                                        <div class="col-md-8 col-lg-9">
+                                            <input
+                                                    name="username"
+                                                    type="text"
+                                                    class="form-control"
+                                                    id="username"
+                                                    placeholder="Lowercase, no spaces"
+                                                    required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label
+                                                for="Email"
+                                                class="col-md-4 col-lg-3 col-form-label"
+                                        >Email</label
+                                        >
+                                        <div class="col-md-8 col-lg-9">
+                                            <input
+                                                    name="email"
+                                                    type="email"
+                                                    class="form-control"
+                                                    id="Email"
+                                                    placeholder="something@example.com"
+                                                    required
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">
+                                            Add User
+                                        </button>
+                                    </div>
+                                </form>
+                                <!-- End Profile Edit Form -->
+                            </div>
+
+
+                        <!-- End Bordered Tabs -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- Vendor JS Files -->
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
 </body>
+<!-- JavaScript to close the alert after 5 seconds -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const uploadButton = document.getElementById('uploadButton');
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const imageDisplay = document.getElementById('imageDisplay');
+
+        uploadButton.addEventListener('click', function () {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function () {
+            if (fileInput.files.length > 0) {
+                const fileName = fileInput.files[0].name;
+                fileNameDisplay.textContent = `Selected File: ${fileName}`;
+
+                // Check if the selected file is an image (you can modify this condition based on your needs)
+                if (/\.(jpg|jpeg|png|gif)$/i.test(fileName)) {
+                    // Display the selected image
+                    const fileReader = new FileReader();
+                    fileReader.onload = function (e) {
+                        imageDisplay.src = e.target.result;
+                        imageDisplay.style.display = 'block';
+                    };
+                    fileReader.readAsDataURL(fileInput.files[0]);
+                } else {
+                    imageDisplay.style.display = 'none'; // Hide the image display if it's not an image
+                }
+            } else {
+                fileNameDisplay.textContent = ''; // Clear the file name display
+                imageDisplay.style.display = 'none'; // Hide the image display
+            }
+        });
+    });
+
+</script>
 </html>

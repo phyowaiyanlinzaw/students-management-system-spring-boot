@@ -27,6 +27,20 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
+        if (username.contains("@")) {
+            // Find user by email
+            User user = userRepository.findByEmail(username);
+
+            if (user == null) {
+                throw new UsernameNotFoundException("Could not find user");
+            }
+
+            System.out.println("User: " + user.getEmail() + " " + user.getRoles());
+
+            return new CustomerUserDetails(user);
+        }
+
+        // Find user by username
         User user = userRepository.findByUsername(username);
 
         if (user == null) {
@@ -37,8 +51,9 @@ public class UserService implements UserDetailsService {
 
         return new CustomerUserDetails(user);
     }
-
     public User save(User user) {
+        user.setEnabled(true);
+        user.setPassword("12345");
         return userRepository.save(user);
     }
 
