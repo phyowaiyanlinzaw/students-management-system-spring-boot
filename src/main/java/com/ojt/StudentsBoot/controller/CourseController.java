@@ -74,9 +74,14 @@ public class CourseController {
     }
 
     @PostMapping("/edit")
-    public String courseEdit(@ModelAttribute Course course,RedirectAttributes redirectAttributes) {
-        courseService.save(course);
-        redirectAttributes.addFlashAttribute("success", "courseEditSuccess");
+    public String courseEdit(@ModelAttribute Course course,RedirectAttributes redirectAttributes,ModelMap modelMap) {
+        try {
+            courseService.save(course);
+            redirectAttributes.addFlashAttribute("success", "courseEditSuccess");
+        }catch (DataIntegrityViolationException e){
+            redirectAttributes.addFlashAttribute("error", "courseDupe");
+            return "redirect:/course/edit/"+course.getId();
+        }
         return "redirect:/course/list";
     }
 

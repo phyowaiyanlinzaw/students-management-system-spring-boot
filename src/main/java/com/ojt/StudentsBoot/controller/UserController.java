@@ -42,9 +42,12 @@ public class UserController {
             return "redirect:/user/list";
     }
 
-    @GetMapping("/edit")
-    public ModelAndView userEditView(){
-        return new ModelAndView("user-edit","user",new User());
+    @GetMapping("/edit/{id}")
+    public ModelAndView userEditView(
+            @PathVariable Long id
+    ){
+        User user = userService.getUserById(id);
+        return new ModelAndView("user-edit","user",user);
     }
 
     @PostMapping("/edit")
@@ -57,6 +60,7 @@ public class UserController {
             @PathVariable Long id,
             RedirectAttributes redirectAttributes
     ){
+        System.out.print("In Disabled URL");
         User user = userService.getUserById(id);
         user.setEnabled(false);
         userService.save(user);

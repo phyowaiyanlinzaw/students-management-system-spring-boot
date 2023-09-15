@@ -53,6 +53,10 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Edit Course Here</h5>
+                        <div th:if="${error eq 'courseDupe'}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            This course already exists!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
 
                         <!-- Floating Labels Form -->
                         <form class="row g-3" th:object="${course}" th:action="@{/course/edit}" method="post">

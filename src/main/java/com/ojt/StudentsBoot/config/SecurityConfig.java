@@ -31,7 +31,7 @@ public class SecurityConfig {
                                         "/vendor/**",
                                         "/fragments/**"
                                 ).permitAll()
-                                .requestMatchers("/student/**").hasAnyRole("USER")
+                                .requestMatchers("/student/**").hasAnyRole("TEACHER")
                                 .requestMatchers("/user/**").hasRole("ADMIN")
                                 .requestMatchers("/").authenticated()
                                 .anyRequest().authenticated()

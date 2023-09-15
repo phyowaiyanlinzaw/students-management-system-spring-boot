@@ -80,6 +80,7 @@
                       <th scope="col">Name</th>
                       <th scope="col">Username</th>
                       <th scope="col">Email</th>
+                      <th scope="col">Action</th>
                       <th scope="col">Enabled</th>
                     </tr>
                   </thead>
@@ -112,6 +113,15 @@
             {data : 'name'},
             { data: 'username'},
             {data:'email'},
+            {
+              data: 'id', // You can set it to null as it's a custom column
+              render: function (data, type, row) {
+                if (type === 'display') {
+                  return '<a href="/user/edit/' + data + '"><i class="bi bi-pencil-fill edit-icon"></i></a>';
+                }
+                return '';
+              }
+            },
             {
               data: 'enabled',
               render: function (data, type, row) {
