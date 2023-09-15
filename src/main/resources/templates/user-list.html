@@ -78,6 +78,8 @@
                     <tr>
                       <th scope="col">ID</th>
                       <th scope="col">Name</th>
+                      <th scope="col">Username</th>
+                      <th scope="col">Email</th>
                       <th scope="col">Enabled</th>
                     </tr>
                   </thead>
@@ -107,7 +109,9 @@
           serverSide: true,
           columns: [
             { data: 'id'},
+            {data : 'name'},
             { data: 'username'},
+            {data:'email'},
             {
               data: 'enabled',
               render: function (data, type, row) {
