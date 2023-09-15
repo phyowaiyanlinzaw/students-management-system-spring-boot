@@ -15,6 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long>, DataTablesRep
 
     List<User> findUsersByEnabledFalse();
 
+
     User findByEmail(String email);
 
 }

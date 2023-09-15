@@ -104,42 +104,57 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap.min.js"></script>
 
     <script>
+
       $(document).ready(function() {
         $('#users').DataTable({
           ajax: '/api/getUsers',
           serverSide: true,
           columns: [
-            { data: 'id'},
-            {data : 'name'},
-            { data: 'username'},
-            {data:'email'},
+            { data: 'id' },
+            { data: 'name' },
+            { data: 'username' },
+            { data: 'email' },
             {
-              data: 'id', // You can set it to null as it's a custom column
-              render: function (data, type, row) {
+              data: 'id',
+              render: function(data, type, row) {
                 if (type === 'display') {
                   return '<a href="/user/edit/' + data + '"><i class="bi bi-pencil-fill edit-icon"></i></a>';
                 }
                 return '';
-              }
+              },
             },
             {
               data: 'enabled',
-              render: function (data, type, row) {
-                // Determine the URL based on the value of 'data'
-                const url = data ? '/user/disable/' : '/user/enable/';
-
-                // Determine the icon class based on the value of 'data'
+              render: function(data, type, row) {
                 const bgClass = data ? ' bg-danger' : ' bg-success';
-
                 const status = data ? 'Disable' : 'Enable';
+                const toggleStatus = data ? false : true;
 
-                // Create the anchor link with the determined URL and icon
-                return '<a href="' + url + row.id + '"><span class="badge'+bgClass+'">' + status +'</span></a>';
-              }
+                return '<a href="#" class="toggle-user" data-user-id="' + row.id + '" data-status="' + toggleStatus + '"><span class="badge' + bgClass + '">' + status + '</span></a>';
+              },
             },
-          ]
+          ],
+        });
+
+        // Add a click event listener for user status toggling
+        $('#users').on('click', '.toggle-user', function() {
+          const userId = $(this).data('user-id');
+          const newStatus = $(this).data('status');
+
+          $.ajax({
+            url: '/api/toggle-active/' + userId + '?status=' + newStatus,
+            type: 'POST',
+            success: function(data) {
+              // Refresh the DataTable
+              $('#users').DataTable().ajax.reload();
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              console.error('Error toggling user status: ' + errorThrown);
+            },
+          });
         });
       });
+
     </script>
 
   </body>

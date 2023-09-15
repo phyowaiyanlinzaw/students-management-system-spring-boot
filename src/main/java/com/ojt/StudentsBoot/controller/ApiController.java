@@ -8,10 +8,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,5 +28,18 @@ public class ApiController {
     @RequestMapping(value = "/getCourses",method = RequestMethod.GET)
     public DataTablesOutput<Course> getCourses(@Valid DataTablesInput input) {
         return courseService.findAll(input);
+    }
+
+    @PostMapping("/toggle-active/{id}")
+    public ResponseEntity<String> toggleUserActive(@PathVariable Long id, @RequestParam Boolean status) {
+        User user = userService.getUserById(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        user.setEnabled(status);
+        userService.save(user);
+
+        return ResponseEntity.ok("User status toggled successfully");
     }
 }

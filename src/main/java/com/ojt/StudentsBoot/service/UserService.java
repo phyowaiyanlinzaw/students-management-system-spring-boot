@@ -52,8 +52,6 @@ public class UserService implements UserDetailsService {
         return new CustomerUserDetails(user);
     }
     public User save(User user) {
-        user.setEnabled(true);
-        user.setPassword("12345");
         return userRepository.save(user);
     }
 

@@ -80,13 +80,14 @@ public class UserController {
         return "redirect:/user/list";
     }
 
-    @GetMapping("/enable/{id}")
+    @GetMapping("/toggle-active/{id}+{status}")
     public String processUserEnable(
             @PathVariable Long id,
+            @PathVariable Boolean status,
             RedirectAttributes redirectAttributes
     ){
         User user = userService.getUserById(id);
-        user.setEnabled(true);
+        user.setEnabled(status);
         userService.save(user);
         redirectAttributes.addFlashAttribute("success", "userEnableSuccess");
         return "redirect:/user/list";
