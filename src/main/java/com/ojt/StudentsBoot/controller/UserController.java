@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -34,10 +35,10 @@ public class UserController {
     ){
         try{
             userService.save(user);
-            System.out.println(user.getName());
             redirectAttributes.addFlashAttribute("success", "userAddSuccess");
         }catch (DataIntegrityViolationException e){
             redirectAttributes.addFlashAttribute("error", "userDupe");
+            return "redirect:/user/add";
         }
             return "redirect:/user/list";
     }
@@ -51,7 +52,18 @@ public class UserController {
     }
 
     @PostMapping("/edit")
-    public String processUserEdit(){
+    public String processUserEdit(
+            @ModelAttribute("user") User user,
+            RedirectAttributes redirectAttributes,
+            ModelMap modelMap
+    ){
+        try{
+            userService.save(user);
+            redirectAttributes.addFlashAttribute("success","userEditSuccess");
+        }catch (DataIntegrityViolationException e){
+            modelMap.addAttribute("error","userDupe");
+            return "user-edit";
+        }
         return "redirect:/user/list";
     }
 

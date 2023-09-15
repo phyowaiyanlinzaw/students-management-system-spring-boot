@@ -49,6 +49,10 @@
     <!-- End Page Title -->
 
     <section class="section profile">
+        <div th:if="${error eq 'userDupe'}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            This User with that username or email already exists!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <div class="row">
 
             <div class="col-xl-12">

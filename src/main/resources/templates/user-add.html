@@ -49,6 +49,10 @@
     <!-- End Page Title -->
 
     <section class="section profile">
+        <div th:if="${error eq 'userDupe'}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            This User with that email or username already exists!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <div class="row">
 
             <div class="col-xl-12">
@@ -56,7 +60,7 @@
                     <div class="card-body pt-3">
                         <div class="tab-content pt-2">
                                 <!-- Profile Edit Form -->
-                                <form th:action="@{/user/add}" method="post">
+                                <form th:action="@{/user/add}" method="post" th:object="${user}">
 
                                     <div class="row mb-3">
                                         <label
@@ -72,6 +76,7 @@
                                                     id="name"
                                                     placeholder="Full Name"
                                                     required
+                                                    th:field="*{name}"
                                             />
                                         </div>
                                     </div>
@@ -90,6 +95,7 @@
                                                     id="username"
                                                     placeholder="Lowercase, no spaces"
                                                     required
+                                                    th:field="*{username}"
                                             />
                                         </div>
                                     </div>
@@ -108,6 +114,7 @@
                                                     id="Email"
                                                     placeholder="something@example.com"
                                                     required
+                                                    th:field="*{email}"
                                             />
                                         </div>
                                     </div>
