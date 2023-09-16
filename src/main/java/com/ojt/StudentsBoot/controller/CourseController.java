@@ -1,7 +1,6 @@
 package com.ojt.StudentsBoot.controller;
 
 import com.ojt.StudentsBoot.model.Course;
-import com.ojt.StudentsBoot.model.Role;
 import com.ojt.StudentsBoot.model.User;
 import com.ojt.StudentsBoot.service.CourseService;
 import com.ojt.StudentsBoot.service.UserService;
@@ -13,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -88,7 +84,7 @@ public class CourseController {
     @GetMapping("/disable/{id}")
     public String courseDelete(RedirectAttributes redirectAttributes, @PathVariable Long id) {
         Course course = courseService.findById(id);
-        course.setDisabled(true);
+        course.setEnabled(true);
         courseService.save(course);
         redirectAttributes.addFlashAttribute("success", "courseDisableSuccess");
         return "redirect:/course/list";
@@ -97,7 +93,7 @@ public class CourseController {
     @GetMapping("/enable/{id}")
     public String courseEnable(RedirectAttributes redirectAttributes, @PathVariable Long id) {
         Course course = courseService.findById(id);
-        course.setDisabled(false);
+        course.setEnabled(false);
         courseService.save(course);
         redirectAttributes.addFlashAttribute("success", "courseEnableSuccess");
         return "redirect:/course/list";

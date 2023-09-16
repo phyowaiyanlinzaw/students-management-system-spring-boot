@@ -37,6 +37,7 @@
             background-color: transparent !important;
             color: black !important;
         }
+
         li.paginate_button.active {
             background-color: transparent !important;
             color: blue !important;
@@ -100,8 +101,7 @@
                                 <th scope="col">Course Id</th>
                                 <th scope="col">Course Name</th>
                                 <th scope="col">Teacher</th>
-                                <th scope="col">Edit</th>
-                                <th scope="col">Enabled</th>
+                                <th scope="col">Action</th>
                             </tr>
                             </thead>
                         </table>
@@ -125,7 +125,7 @@
 <script>
     $(document).ready(function () {
         $('#courses').DataTable({
-            ajax: '/api/getCourses',
+            ajax: '/api/get-courses',
             scrollY: '50vh',
             serverSide: true,
             columns: [
@@ -142,30 +142,33 @@
                     }
                 },
                 {
-                    data: 'id', // You can set it to null as it's a custom column
+                    data: 'enabled',
                     render: function (data, type, row) {
-                        if (type === 'display') {
-                            return '<a href="/course/edit/' + data + '"><i class="bi bi-pencil-fill edit-icon"></i></a>';
-                        }
-                        return '';
-                    }
+                        const bgClass = data ? ' bg-danger' : ' bg-success';
+                        const status = data ? 'Disable' : 'Enable';
+                        const toggleStatus = !data;
+                        const toggleButton = '<a href="#" class="toggle-course" data-course-id="' + row.id + '" data-status="' + toggleStatus + '"><span class="badge' + bgClass + '">' + status + '</span></a>';
+                        const editButton = '<a href="/course/edit/'+row.id+'" class="edit-student" data-course-id="' + row.id + '"><span class="badge bg-primary">Edit</span></a>';
+
+                        return editButton + ' | ' + toggleButton;
+                    },
                 },
-                {
-                    data: 'disabled',
-                    render: function (data, type, row) {
-                        // Determine the URL based on the value of 'data'
-                        const url = data ? '/course/enable/' : '/course/disable/';
-
-                        // Determine the icon class based on the value of 'data'
-                        const bgClass = data ? ' bg-success' : ' bg-danger';
-
-                        const status = data ? 'Enable' : 'Disable';
-
-                        // Create the anchor link with the determined URL and icon
-                        return '<a href="' + url + row.id + '"><span class="badge'+bgClass+'">' + status +'</span></a>';
-                    }
-                }
             ]
+        }).on('click', '.toggle-course', function () {
+            const courseId = $(this).data('course-id');
+            const newStatus = $(this).data('status');
+
+            $.ajax({
+                url: '/api/toggle-course-active/' + courseId + '?status=' + newStatus,
+                type: 'POST',
+                success: function (data) {
+                    // Refresh the DataTable
+                    $('#courses').DataTable().ajax.reload();
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error('Error toggling course status: ' + errorThrown);
+                },
+            });
         });
     });
 

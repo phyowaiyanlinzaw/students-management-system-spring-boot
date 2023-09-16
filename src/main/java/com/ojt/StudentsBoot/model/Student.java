@@ -1,5 +1,6 @@
 package com.ojt.StudentsBoot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,14 +23,15 @@ public class Student {
     private String dob;
     private String gender;
     private String education;
+
+    @Column(unique = true)
     private String phone;
-    private String email;
+    private String photoPath;
 
-    @Transient
-    private String selectedCourses;
+    @Column(unique = true)
+    private String code;
 
-    @Lob
-    private byte[] image;
+    private boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Course> courses = new ArrayList<>();

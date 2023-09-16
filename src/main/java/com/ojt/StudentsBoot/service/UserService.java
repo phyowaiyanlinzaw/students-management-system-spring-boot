@@ -27,6 +27,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
+
         if (username.contains("@")) {
             // Find user by email
             User user = userRepository.findByEmail(username);

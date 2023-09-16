@@ -26,7 +26,7 @@ public class CourseService {
 
     public void save(Course course){
         course.setCourseStartDate(new Timestamp(System.currentTimeMillis()));
-        course.setDisabled(false);
+        course.setEnabled(false);
         courseRepository.save(course);
     }
 
@@ -47,7 +47,7 @@ public class CourseService {
     }
 
     public List<Course> findAllByDisabledFalse(){
-        return courseRepository.findCoursesByDisabledFalse();
+        return courseRepository.findCoursesByEnabledTrue();
     }
 
 

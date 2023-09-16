@@ -49,10 +49,14 @@
     <!-- End Page Title -->
 
     <section class="section profile">
-        <div th:if="${error eq 'userDupe'}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            This User with that email or username already exists!
+        <div th:if="${error eq 'studentDupe'}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            Student Already Exists!
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+        <div th:if="${success eq 'studentAddSuccess'}" class="alert alert-success alert-dismissible fade show" role="alert">
+            Student Added Successfully!
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
         <div class="row">
             <div class="col-xl-4">
                 <div class="card">
@@ -62,9 +66,11 @@
                         <img
                                 src=""
                                 alt="Your Photo"
-                                class="rounded-circle d-none"
+                                class="img-rounded"
+                                id="imageDisplay"
+                                style="display: none"
                         />
-                        <p class="mt-3 mb-0">Your Selected Photo Will Show Up Here</p>
+                        <p class="mt-3 mb-0" id="fileNameDisplay">Your Selected Photo Will Show Up Here</p>
                     </div>
                 </div>
             </div>
@@ -73,7 +79,7 @@
                     <div class="card-body pt-3">
                         <div class="tab-content pt-2">
                             <!-- Profile Edit Form -->
-                            <form th:action="@{/student/add}" th:object="${student}">
+                            <form th:action="@{/student/add}" th:object="${student}" method="post" enctype="multipart/form-data">
                                 <div class="row mb-3">
                                     <label
                                             class="col-md-4 col-lg-3 col-form-label"
@@ -85,12 +91,15 @@
                                                     href="#"
                                                     class="btn btn-primary btn-sm"
                                                     title="Upload new profile image"
+                                                    id="uploadButton"
                                             ><i class="bi bi-upload"></i
                                             ></a>
+                                            <input type="file" class="d-none" id="fileInput" required name="photo"/>
                                             <a
                                                     href="#"
                                                     class="btn btn-danger btn-sm"
                                                     title="Remove my profile image"
+                                                    id="removeImageButton"
                                             ><i class="bi bi-trash"></i
                                             ></a>
                                         </div>
@@ -99,9 +108,27 @@
 
                                 <div class="row mb-3">
                                     <label
+                                            for="code"
+                                            class="col-md-4 col-lg-3 col-form-label"
+                                    >Student Code</label
+                                    >
+                                    <div class="col-md-8 col-lg-9">
+                                        <input
+                                                name="code"
+                                                type="text"
+                                                class="form-control"
+                                                id="code"
+                                                th:field="*{code}"
+                                                readonly
+                                        />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label
                                             for="name"
                                             class="col-md-4 col-lg-3 col-form-label"
-                                    >Student's Name</label
+                                    >Student Name</label
                                     >
                                     <div class="col-md-8 col-lg-9">
                                         <input
@@ -109,6 +136,7 @@
                                                 type="text"
                                                 class="form-control"
                                                 id="name"
+                                                required
                                         />
                                     </div>
                                 </div>
@@ -121,11 +149,11 @@
                                     <div class="col-md-8 col-lg-9 d-flex">
                                         <div class="me-3">
 
-                                                <input
-                                                        type="radio"
-                                                        value="male"
-                                                        id="male"
-                                                />
+                                            <input
+                                                    type="radio"
+                                                    value="male"
+                                                    id="male"
+                                            />
                                             <label for="male">Male</label>
                                         </div>
                                         <div class="me-3">
@@ -163,6 +191,7 @@
                                                 type="date"
                                                 class="form-control"
                                                 id="dob"
+                                                required
                                         />
                                     </div>
                                 </div>
@@ -180,6 +209,7 @@
                                                 class="form-control"
                                                 id="Phone"
                                                 placeholder="+959123456789"
+                                                required
                                         />
                                     </div>
                                 </div>
@@ -195,13 +225,14 @@
                                                 name="education"
                                                 class="form-select"
                                                 id="education"
+                                                required
                                         >
                                             <option selected>Select Education</option>
-                                            <option value="1">High School Graduate</option>
-                                            <option value="2">College Diploma</option>
-                                            <option value="3">Bachelor</option>
-                                            <option value="4">Master</option>
-                                            <option value="5">Phd</option>
+                                            <option value="High School Graduate">High School Graduate</option>
+                                            <option value="College Diploma">College Diploma</option>
+                                            <option value="Bachelor">Bachelor</option>
+                                            <option value="Master">Master</option>
+                                            <option value="Phd">Phd</option>
                                         </select>
                                     </div>
                                 </div>
@@ -211,14 +242,19 @@
                                             class="col-md-4 col-lg-3 col-form-label"
                                     >Courses</label
                                     >
-                                    <div class="col-md-8 col-lg-9" th:each="course : ${courses}">
-                                        <input type="checkbox"
-                                                  name="courses"
-                                                  id="courses"
-                                                  class="form-check-input"
-                                                    th:value="${course.id}"
-                                                  />
-                                        <label for="courses" class="form-check-label" th:text="${course.courseName}"></label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <div class="form-check d-flex flex-wrap" >
+                                            <div class="form-check form-check-inline mb-2" th:each="course : ${courses}">
+                                                <input type="checkbox"
+                                                       name="courses"
+                                                       id="courses"
+                                                       class="form-check-input"
+                                                       th:value="${course.id}"
+                                                />
+                                                <label for="courses" class="form-check-label"
+                                                       th:text="${course.courseName}"></label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="text-center">
@@ -250,9 +286,13 @@
         const fileInput = document.getElementById('fileInput');
         const fileNameDisplay = document.getElementById('fileNameDisplay');
         const imageDisplay = document.getElementById('imageDisplay');
+        const removeImageButton = document.getElementById('removeImageButton'); //
 
-        uploadButton.addEventListener('click', function () {
-            fileInput.click();
+        uploadButton.addEventListener('click', function (e) {
+            // Prevent the default behavior of the anchor link
+
+                fileInput.click();
+
         });
 
         fileInput.addEventListener('change', function () {
@@ -276,6 +316,16 @@
                 fileNameDisplay.textContent = ''; // Clear the file name display
                 imageDisplay.style.display = 'none'; // Hide the image display
             }
+        });
+
+        // Add an event listener to the remove button
+        removeImageButton.addEventListener('click', function () {
+            // Reset the file input to clear the selected file
+            fileInput.value = '';
+            // Clear the file name display
+            fileNameDisplay.textContent = 'Your Selected Photo Will Show Up Here';
+            // Hide the image display
+            imageDisplay.style.display = 'none';
         });
     });
 

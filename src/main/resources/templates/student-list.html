@@ -1,10 +1,187 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <title>Students List | Students Management System</title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
+
+    <link   href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Favicons -->
+    <link th:href="@{/images/favicon.png}" rel="icon">
+    <link th:href="@{/images/apple-touch-icon.png}" rel="apple-touch-icon">
+
+    <link
+            th:href="@{/vendor/bootstrap-icons/bootstrap-icons.css}"
+            rel="stylesheet"
+    />
+    <link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link href="/vendor/remixicon/remixicon.css" rel="stylesheet" />
+
+    <!-- Template Main CSS File -->
+    <link href="/css/style.css" rel="stylesheet" />
 </head>
+
 <body>
+<!-- ======= Header ======= -->
+<div th:replace="fragments/header :: header"></div>
+<!-- End Header -->
+
+<!-- ======= Sidebar ======= -->
+<div th:replace="fragments/sidebar :: #sidebar"></div>
+<!-- End Sidebar-->
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Students List</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                <li class="breadcrumb-item">Student</li>
+                <li class="breadcrumb-item active">List</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Students</h5>
+                        <div th:if="${success eq 'userEnableSuccess'}"
+                             class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> User has been enabled.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div th:if="${success eq 'courseDisableSuccess'}"
+                             class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> User has been disabled.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div th:if="${success eq 'studentAddSuccess'}"
+                             class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Student has been added.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <!-- Table with stripped rows -->
+                        <table class="display" id="students">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Code</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Gender</th>
+                                <th scope="col">Education</th>
+                                <th scope="col">Courses</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                            </thead>
+                        </table>
+                        <!-- End Table with stripped rows -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- End #main -->
+
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery.spring-friendly.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap.min.js"></script>
+
+<script>
+
+    $(document).ready(function() {
+        $('#students').DataTable({
+            ajax: '/api/get-students',
+            serverSide: true,
+            processing: true,
+
+            columns: [
+                {data: 'id'},
+                { data: 'code' },
+                { data: 'name' },
+                { data: 'gender' },
+                {data: 'education'},
+                {
+                    data: 'courses',
+                    render: function (data, type, row) {
+                        if (data && Array.isArray(data)) {
+                            return data.map(function (course) {
+                                return course.courseName;
+                            }).join(', ');
+                        } else {
+                            return ''; // Handle the case when data is undefined or not an array
+                        }
+                    }
+                },
+                {
+                    data: 'enabled',
+                    render: function (data, type, row) {
+                        const bgClass = data ? ' bg-danger' : ' bg-success';
+                        const status = data ? 'Disable' : 'Enable';
+                        const toggleStatus = !data;
+                        const toggleButton = '<a href="#" class="toggle-student" data-student-id="' + row.id + '" data-status="' + toggleStatus + '"><span class="badge' + bgClass + '">' + status + '</span></a>';
+                        const editButton = '<a href="/student/edit/'+row.id+'" class="edit-student" data-student-id="' + row.id + '"><span class="badge bg-primary">Edit</span></a>';
+
+                        return editButton + ' | ' + toggleButton;
+                    },
+                },
+            ],
+        }).on('click', '.toggle-student', function () {
+            const studentId = $(this).data('student-id');
+            const newStatus = $(this).data('status');
+
+            $.ajax({
+                url: '/api/toggle-student-active/' + studentId + '?status=' + newStatus,
+                type: 'POST',
+                success: function (data) {
+                    // Refresh the DataTable
+                    $('#students').DataTable().ajax.reload();
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error('Error toggling student status: ' + errorThrown);
+                },
+            });
+        });
+
+        //     .on('click', '.toggle-user', function() {
+        //     const userId = $(this).data('user-id');
+        //     const newStatus = $(this).data('status');
+        //
+        //     $.ajax({
+        //         url: '/api/toggle-active/' + userId + '?status=' + newStatus,
+        //         type: 'POST',
+        //         success: function(data) {
+        //             // Refresh the DataTable
+        //             $('#users').DataTable().ajax.reload();
+        //         },
+        //         error: function(xhr, textStatus, errorThrown) {
+        //             console.error('Error toggling user status: ' + errorThrown);
+        //         },
+        //     });
+        // });
+    });
+
+</script>
 
 </body>
 </html>
