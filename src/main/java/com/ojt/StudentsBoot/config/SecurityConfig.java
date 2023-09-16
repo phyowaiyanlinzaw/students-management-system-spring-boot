@@ -49,11 +49,7 @@ public class SecurityConfig {
                                 })
                                 .permitAll()
                 )
-                .rememberMe(
-                        (rememberMe) -> rememberMe
-                                .key("my-secure-key")
-                                .tokenValiditySeconds(86400)
-                )
+
                 .logout(
                         (logout) -> logout.logoutUrl("/logout").permitAll()
                 );
