@@ -59,73 +59,81 @@
                 <div class="card">
                     <div class="card-body pt-3">
                         <div class="tab-content pt-2">
-                                <!-- Profile Edit Form -->
-                                <form th:action="@{/user/add}" method="post" th:object="${user}">
+                            <!-- Profile Edit Form -->
+                            <form th:action="@{/user/add}" method="post" th:object="${user}">
 
-                                    <div class="row mb-3">
-                                        <label
-                                                for="name"
-                                                class="col-md-4 col-lg-3 col-form-label"
-                                        >Full Name</label
-                                        >
-                                        <div class="col-md-8 col-lg-9">
-                                            <input
-                                                    name="name"
-                                                    type="text"
-                                                    class="form-control"
-                                                    id="name"
-                                                    placeholder="Full Name"
-                                                    required
-                                                    th:field="*{name}"
-                                            />
-                                        </div>
+                                <div class="row mb-3">
+                                    <label
+                                            for="name"
+                                            class="col-md-4 col-lg-3 col-form-label"
+                                    >Full Name</label
+                                    >
+                                    <div class="col-md-8 col-lg-9">
+                                        <input
+                                                name="name"
+                                                type="text"
+                                                class="form-control"
+                                                id="name"
+                                                placeholder="Full Name"
+                                                required
+                                                th:field="*{name}"
+                                        />
                                     </div>
+                                </div>
 
-                                    <div class="row mb-3">
-                                        <label
-                                                for="username"
-                                                class="col-md-4 col-lg-3 col-form-label"
-                                        >Username</label
-                                        >
-                                        <div class="col-md-8 col-lg-9">
-                                            <input
-                                                    name="username"
-                                                    type="text"
-                                                    class="form-control"
-                                                    id="username"
-                                                    placeholder="Lowercase, no spaces"
-                                                    required
-                                                    th:field="*{username}"
-                                            />
-                                        </div>
+                                <div class="row mb-3">
+                                    <label
+                                            for="username"
+                                            class="col-md-4 col-lg-3 col-form-label"
+                                    >Username</label
+                                    >
+                                    <div class="col-md-8 col-lg-9">
+                                        <input
+                                                name="username"
+                                                type="text"
+                                                class="form-control"
+                                                id="username"
+                                                placeholder="Lowercase, no spaces"
+                                                required
+                                                th:field="*{username}"
+                                        />
                                     </div>
+                                </div>
 
-                                    <div class="row mb-3">
-                                        <label
-                                                for="Email"
-                                                class="col-md-4 col-lg-3 col-form-label"
-                                        >Email</label
-                                        >
-                                        <div class="col-md-8 col-lg-9">
-                                            <input
-                                                    name="email"
-                                                    type="email"
-                                                    class="form-control"
-                                                    id="Email"
-                                                    placeholder="something@example.com"
-                                                    required
-                                                    th:field="*{email}"
-                                            />
-                                        </div>
+                                <div class="row mb-3">
+                                    <label
+                                            for="Email"
+                                            class="col-md-4 col-lg-3 col-form-label"
+                                    >Email</label
+                                    >
+                                    <div class="col-md-8 col-lg-9">
+                                        <input
+                                                name="email"
+                                                type="email"
+                                                class="form-control"
+                                                id="Email"
+                                                placeholder="something@example.com"
+                                                required
+                                                th:field="*{email}"
+                                        />
                                     </div>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">
-                                            Add User
-                                        </button>
-                                    </div>
-                                </form>
-                                <!-- End Profile Edit Form -->
-                            </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="role" class="col-md-4 col-lg-3 col-form-label">Role</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <select name="role" class="form-select" id="role" required th:field="*{roles}">
+                                            <option value="2">Admin</option>
+                                            <option value="1">Teacher</option>
+                                        </select>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">
+                                        Add User
+                                    </button>
+                                </div>
+                            </form>
+                            <!-- End Profile Edit Form -->
+                        </div>
 
 
                         <!-- End Bordered Tabs -->

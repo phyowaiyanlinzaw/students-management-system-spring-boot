@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
@@ -41,7 +41,7 @@
     <!-- ======= Sidebar ======= -->
     <div th:replace="fragments/sidebar :: #sidebar"></div>
     <!-- End Sidebar-->
-
+    <h1 class="d-none" sec:authentication="principal.username" id="currentUserName"></h1>
     <main id="main" class="main">
       <div class="pagetitle">
         <h1>Users List</h1>
@@ -80,6 +80,7 @@
                       <th scope="col">Name</th>
                       <th scope="col">Username</th>
                       <th scope="col">Email</th>
+                        <th scope="col">Roles</th>
                       <th scope="col">Action</th>
                       <th scope="col">Enabled</th>
                     </tr>
@@ -115,6 +116,16 @@
             { data: 'username' },
             { data: 'email' },
             {
+              data:'roles',
+                render: function(data, type, row) {
+                    let roles = '';
+                    for (let i = 0; i < data.length; i++) {
+                    roles += data[i].name + '<br>';
+                    }
+                    return roles;
+                },
+            },
+            {
               data: 'id',
               render: function(data, type, row) {
                 if (type === 'display') {
@@ -129,6 +140,10 @@
                 const bgClass = data ? ' bg-danger' : ' bg-success';
                 const status = data ? 'Disable' : 'Enable';
                 const toggleStatus = data ? false : true;
+
+                if (row.username === $('#currentUserName').text()) {
+                  return '';
+                }
 
                 return '<a href="#" class="toggle-user" data-user-id="' + row.id + '" data-status="' + toggleStatus + '"><span class="badge' + bgClass + '">' + status + '</span></a>';
               },
