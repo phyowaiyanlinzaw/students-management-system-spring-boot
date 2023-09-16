@@ -46,7 +46,7 @@ public class CourseService {
         return courseRepository.findAll(input);
     }
 
-    public List<Course> findAllByDisabledFalse(){
+    public List<Course> findAllByEnabledTrue(){
         return courseRepository.findCoursesByEnabledTrue();
     }
 

@@ -6,7 +6,6 @@ import com.ojt.StudentsBoot.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +38,7 @@ public class StudentController {
         Long count = studentService.getStudentsCount();
         Student student = new Student();
         student.setCode(String.format("STU%04d",count+1));
-        modelMap.addAttribute("courses",courseService.findAllByDisabledFalse());
+        modelMap.addAttribute("courses",courseService.findAllByEnabledTrue());
         return new ModelAndView("student-add","student",student);
     }
 
@@ -68,9 +67,14 @@ public class StudentController {
         return "redirect:/student/list";
     }
 
-    @GetMapping("/edit")
-    public ModelAndView studentEditView(){
-        return new ModelAndView("student-edit","student",new Student());
+    @GetMapping("/edit/{id}")
+    public String studentEditView(
+            @PathVariable Long id,
+            ModelMap modelMap
+    ){
+        modelMap.addAttribute("courses",courseService.findAllByEnabledTrue());
+        modelMap.addAttribute("student",studentService.findById(id));
+        return "student-edit";
     }
 
     @PostMapping("/edit")

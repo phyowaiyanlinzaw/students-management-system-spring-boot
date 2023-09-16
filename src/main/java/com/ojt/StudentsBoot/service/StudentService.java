@@ -26,6 +26,9 @@ public class StudentService {
         return studentRepository.findAll(input);
     }
 
+    public Student findById(Long id) {
+        return studentRepository.findById(id).orElse(null);
+    }
     public Student getStudentById(Long id) {
         return studentRepository.findById(id).orElse(null);
     }

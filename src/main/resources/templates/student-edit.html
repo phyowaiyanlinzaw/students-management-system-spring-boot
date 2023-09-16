@@ -1,10 +1,357 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+
+    <title>Edit Student | Students Management System</title>
+    <meta content="" name="description"/>
+    <meta content="" name="keywords"/>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link
+            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+            rel="stylesheet"
+    />
+
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Favicons -->
+    <link th:href="@{/images/favicon.png}" rel="icon">
+    <link th:href="@{/images/apple-touch-icon.png}" rel="apple-touch-icon">
+
+    <link
+            th:href="@{/vendor/bootstrap-icons/bootstrap-icons.css}"
+            rel="stylesheet"
+    />
+    <link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"/>
+    <link href="/vendor/remixicon/remixicon.css" rel="stylesheet"/>
+
+    <!-- Template Main CSS File -->
+    <link href="/css/style.css" rel="stylesheet"/>
 </head>
 <body>
+<!-- ======= Header ======= -->
+<div th:replace="fragments/header :: header"></div>
+<div th:replace="fragments/sidebar :: #sidebar"></div>
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Profile</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item">Students</li>
+                <li class="breadcrumb-item active">Edit</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- End Page Title -->
 
+    <section class="section profile">
+        <div th:if="${error eq 'studentDupe'}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            Student Already Exists!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${success eq 'studentAddSuccess'}" class="alert alert-success alert-dismissible fade show"
+             role="alert">
+            Student Added Successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div class="row">
+            <div class="col-xl-4">
+                <div class="card">
+                    <div
+                            class="card-body profile-card pt-4 d-flex flex-column align-items-center"
+                    >
+                        <img
+                                th:src="${student.photoPath}"
+                                alt="Your Photo"
+                                class="img-rounded"
+                                id="imageDisplay"
+                        />
+                        <p class="mt-3 mb-0 d-none" id="fileNameDisplay"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <div class="tab-content pt-2">
+                            <!-- Profile Edit Form -->
+                            <form th:action="@{/student/edit}" th:object="${student}" method="post"
+                                  enctype="multipart/form-data">
+                                <div class="row mb-3">
+                                    <label
+                                            class="col-md-4 col-lg-3 col-form-label"
+                                    >Profile Image</label
+                                    >
+                                    <div class="col-md-8 col-lg-9">
+                                        <div class="pt-2">
+                                            <a
+                                                    href="#"
+                                                    class="btn btn-primary btn-sm"
+                                                    title="Upload new profile image"
+                                                    id="uploadButton"
+                                            ><i class="bi bi-upload"></i
+                                            ></a>
+                                            <input type="file" class="d-none" id="fileInput" required name="photo"/>
+                                            <a
+                                                    href="#"
+                                                    class="btn btn-danger btn-sm"
+                                                    title="Remove my profile image"
+                                                    id="removeImageButton"
+                                            ><i class="bi bi-trash"></i
+                                            ></a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label
+                                            for="code"
+                                            class="col-md-4 col-lg-3 col-form-label"
+                                    >Student Code</label
+                                    >
+                                    <div class="col-md-8 col-lg-9">
+                                        <input
+                                                name="code"
+                                                type="text"
+                                                class="form-control"
+                                                id="code"
+                                                th:field="*{code}"
+                                                readonly
+                                        />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label
+                                            for="name"
+                                            class="col-md-4 col-lg-3 col-form-label"
+                                    >Student Name</label
+                                    >
+                                    <div class="col-md-8 col-lg-9">
+                                        <input
+                                                name="name"
+                                                type="text"
+                                                class="form-control"
+                                                id="name"
+                                                th:field="*{name}"
+
+                                                required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label
+                                            class="col-md-4 col-lg-3 col-form-label"
+                                    >Gender</label
+                                    >
+                                    <div class="col-md-8 col-lg-9 d-flex">
+                                        <div class="me-3">
+
+                                            <input
+                                                    type="radio"
+                                                    value="male"
+                                                    id="male"
+                                                    th:checked="${student.gender=='male'}"
+                                                    th:field="*{gender}"
+                                            />
+                                            <label for="male">Male</label>
+                                        </div>
+                                        <div class="me-3">
+
+                                            <input
+                                                    type="radio"
+                                                    value="female"
+                                                    id="female"
+                                                    th:checked="${student.gender=='female'}"
+                                                    th:field="*{gender}"
+                                            />
+                                            <label for="female">Female</label>
+                                        </div>
+                                        <div class="me-3">
+
+                                            <input
+                                                    type="radio"
+                                                    value="others"
+                                                    id="others"
+                                                    th:checked="${student.gender=='others'}"
+                                                    th:field="*{gender}"
+                                            />
+                                            <label for="others">Others</label>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label
+                                            for="dob"
+                                            class="col-md-4 col-lg-3 col-form-label"
+                                    >Date of Birth</label
+                                    >
+                                    <div class="col-md-8 col-lg-9">
+                                        <input
+                                                name="dob"
+                                                type="date"
+                                                class="form-control"
+                                                id="dob"
+                                                required
+                                                th:field="*{dob}"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label
+                                            for="Phone"
+                                            class="col-md-4 col-lg-3 col-form-label"
+                                    >Phone</label
+                                    >
+                                    <div class="col-md-8 col-lg-9">
+                                        <input
+                                                name="phone"
+                                                type="text"
+                                                class="form-control"
+                                                id="Phone"
+                                                placeholder="+959123456789"
+                                                required
+                                                th:field="*{phone}"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label
+                                            for="education"
+                                            class="col-md-4 col-lg-3 col-form-label"
+                                            th:text="${student.education}"
+                                    ></label
+                                    >
+                                    <div class="col-md-8 col-lg-9">
+                                        <select
+                                                name="education"
+                                                class="form-select"
+                                                id="education"
+                                                required
+                                                th:field="*{education}"
+                                        >
+                                            <option value="High School Graduate"
+                                            >High School Graduate
+                                            </option>
+                                            <option value="College Diploma"
+                                            >College Diploma
+                                            </option>
+                                            <option value="Bachelor"
+                                            >Bachelor
+                                            </option>
+                                            <option value="Master"
+                                            >Master
+                                            </option>
+                                            <option value="Phd"
+                                            >Phd
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label
+                                            for="courses"
+                                            class="col-md-4 col-lg-3 col-form-label"
+                                    >Courses</label
+                                    >
+                                    <div class="col-md-8 col-lg-9">
+                                        <div class="form-check d-flex flex-wrap">
+                                            <div class="form-check form-check-inline mb-2"
+                                                 th:each="course : ${courses}">
+                                                <input type="checkbox"
+                                                       name="courses"
+                                                       id="courses"
+                                                       class="form-check-input"
+                                                       th:value="${course.id}"
+                                                       th:checked="${student.courses.contains(course)}"
+                                                />
+                                                <label for="courses" class="form-check-label"
+                                                       th:text="${course.courseName}"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                            <!-- End Profile Edit Form -->
+                        </div>
+
+
+                        <!-- End Bordered Tabs -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- Vendor JS Files -->
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
 </body>
+<!-- JavaScript to close the alert after 5 seconds -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const uploadButton = document.getElementById('uploadButton');
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const imageDisplay = document.getElementById('imageDisplay');
+        const removeImageButton = document.getElementById('removeImageButton'); //
+
+        uploadButton.addEventListener('click', function (e) {
+            // Prevent the default behavior of the anchor link
+
+            fileInput.click();
+
+        });
+
+        fileInput.addEventListener('change', function () {
+            if (fileInput.files.length > 0) {
+                const fileName = fileInput.files[0].name;
+                fileNameDisplay.textContent = `Selected File: ${fileName}`;
+
+                // Check if the selected file is an image (you can modify this condition based on your needs)
+                if (/\.(jpg|jpeg|png|gif)$/i.test(fileName)) {
+                    // Display the selected image
+                    const fileReader = new FileReader();
+                    fileReader.onload = function (e) {
+                        imageDisplay.src = e.target.result;
+                        imageDisplay.style.display = 'block';
+                    };
+                    fileReader.readAsDataURL(fileInput.files[0]);
+                } else {
+                    imageDisplay.style.display = 'none'; // Hide the image display if it's not an image
+                }
+            } else {
+                fileNameDisplay.textContent = ''; // Clear the file name display
+                imageDisplay.style.display = 'none'; // Hide the image display
+            }
+        });
+
+        // Add an event listener to the remove button
+        removeImageButton.addEventListener('click', function () {
+            // Reset the file input to clear the selected file
+            fileInput.value = '';
+            // Clear the file name display
+            fileNameDisplay.textContent = 'Your Selected Photo Will Show Up Here';
+            // Hide the image display
+            imageDisplay.style.display = 'none';
+        });
+    });
+
+</script>
 </html>
