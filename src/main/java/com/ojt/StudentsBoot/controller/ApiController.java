@@ -56,13 +56,13 @@ public class ApiController {
 
     @PostMapping("/toggle-student-active/{id}")
     public ResponseEntity<String> toggleStudentActive(@PathVariable Long id, @RequestParam Boolean status) {
-        User user = userService.getUserById(id);
-        if (user == null) {
+        Student student = studentService.getStudentById(id);
+        if (student == null) {
             return ResponseEntity.notFound().build();
         }
 
-        user.setEnabled(status);
-        userService.save(user);
+        student.setEnabled(status);
+        studentService.save(student);
 
         return ResponseEntity.ok("User status toggled successfully");
     }

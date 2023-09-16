@@ -59,17 +59,24 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Students</h5>
-                        <div th:if="${success eq 'userEnableSuccess'}"
-                             class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> User has been enabled.
+                        <div class="row">
+                            <div class="col-6">
+                                <h5 class="card-title">Students</h5>
+                            </div>
+                            <div class="col-6 text-end">
+                                <button class="btn btn-primary mt-3">Generate Report</button>
+                            </div>
+                        </div>
+                        <div class="alert alert-success alert-dismissible d-none" role="alert" id="enableSuccessAlert">
+                            <strong>Success!</strong> Student has been enabled.
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                        <div th:if="${success eq 'courseDisableSuccess'}"
-                             class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> User has been disabled.
+
+                        <div class="alert alert-success alert-dismissible d-none" role="alert" id="disableSuccessAlert">
+                            <strong>Success!</strong> Student has been disabled.
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
+
                         <div th:if="${success eq 'studentAddSuccess'}"
                              class="alert alert-success alert-dismissible fade show" role="alert">
                             <strong>Success!</strong> Student has been added.
@@ -83,6 +90,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Code</th>
                                 <th scope="col">Name</th>
+                                <th scope="col">Photo</th>
                                 <th scope="col">Gender</th>
                                 <th scope="col">Education</th>
                                 <th scope="col">Courses</th>
@@ -119,6 +127,18 @@
                 {data: 'id'},
                 { data: 'code' },
                 { data: 'name' },
+                {
+                    data: 'photoPath',
+                    render: function (data, type, row) {
+                        if (type === 'display' && data) {
+                            // Return an HTML image tag
+                            return '<img src="' + data + '" width="50px" height="50px" alt="Student Photo" />';
+                        } else {
+                            // Return an empty string if 'photoPath' is not available
+                            return '';
+                        }
+                    }
+                },
                 { data: 'gender' },
                 {data: 'education'},
                 {
@@ -149,11 +169,17 @@
         }).on('click', '.toggle-student', function () {
             const studentId = $(this).data('student-id');
             const newStatus = $(this).data('status');
-
+            const successAlertId = newStatus ? '#enableSuccessAlert' : '#disableSuccessAlert';
             $.ajax({
                 url: '/api/toggle-student-active/' + studentId + '?status=' + newStatus,
                 type: 'POST',
                 success: function (data) {
+                    // Show the success alert
+                    $(successAlertId).removeClass('d-none');
+                    // Set a timeout to hide the alert after a few seconds (e.g., 5 seconds)
+                    setTimeout(function () {
+                        $(successAlertId).addClass('d-none');
+                    }, 5000); // 5000 milliseconds (5 seconds)
                     // Refresh the DataTable
                     $('#students').DataTable().ajax.reload();
                 },
@@ -162,23 +188,6 @@
                 },
             });
         });
-
-        //     .on('click', '.toggle-user', function() {
-        //     const userId = $(this).data('user-id');
-        //     const newStatus = $(this).data('status');
-        //
-        //     $.ajax({
-        //         url: '/api/toggle-active/' + userId + '?status=' + newStatus,
-        //         type: 'POST',
-        //         success: function(data) {
-        //             // Refresh the DataTable
-        //             $('#users').DataTable().ajax.reload();
-        //         },
-        //         error: function(xhr, textStatus, errorThrown) {
-        //             console.error('Error toggling user status: ' + errorThrown);
-        //         },
-        //     });
-        // });
     });
 
 </script>
