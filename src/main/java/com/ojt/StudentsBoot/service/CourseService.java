@@ -8,6 +8,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Service
 public class CourseService {
@@ -43,6 +44,10 @@ public class CourseService {
 
     public DataTablesOutput<Course> findAll(DataTablesInput input) {
         return courseRepository.findAll(input);
+    }
+
+    public List<Course> findAllByDisabledFalse(){
+        return courseRepository.findCoursesByDisabledFalse();
     }
 
 
