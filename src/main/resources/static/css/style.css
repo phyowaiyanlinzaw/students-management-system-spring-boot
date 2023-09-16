@@ -1220,3 +1220,9 @@ h6 {
   font-size: 13px;
   color: #012970;
 }
+
+.dataTables_length>label,.dataTables_filter>label
+{
+  display: flex;
+  align-items: center;
+}
