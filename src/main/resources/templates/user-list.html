@@ -139,7 +139,7 @@
               render: function(data, type, row) {
                 const bgClass = data ? ' bg-danger' : ' bg-success';
                 const status = data ? 'Disable' : 'Enable';
-                const toggleStatus = data ? false : true;
+                const toggleStatus = !data;
 
                 if (row.username === $('#currentUserName').text()) {
                   return '';
@@ -149,10 +149,7 @@
               },
             },
           ],
-        });
-
-        // Add a click event listener for user status toggling
-        $('#users').on('click', '.toggle-user', function() {
+        }).on('click', '.toggle-user', function() {
           const userId = $(this).data('user-id');
           const newStatus = $(this).data('status');
 
