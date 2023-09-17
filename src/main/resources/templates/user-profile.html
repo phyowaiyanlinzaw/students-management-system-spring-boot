@@ -57,6 +57,26 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
+    <div th:if="${success eq 'changePwSuccess'}"
+         class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success!</strong> Password updated successfully.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${error eq 'changePwError'}"
+         class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error!</strong> Can't Change Password.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+
+
+    <div th:if="${user.password eq '$2a$12$9fhuoGtmrJGjCOcLdDE7HeyW7pYhsCJTfAvfAJ17O852eJpPVt8Oq'}"
+         class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Please Change Your Default Password</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
     <section class="section profile">
         <div class="row">
             <div class="col-xl-4">
@@ -139,15 +159,6 @@
                                     </div>
                                 </div>
 
-                                <!--                                <div class="row">-->
-                                <!--                                    <div class="col-lg-3 col-md-4 label">Teaches</div>-->
-                                <!--                                    <div class="col-lg-9 col-md-8"-->
-                                <!--                                            th:each="course :${ user.courses}"-->
-                                <!--                                            th:text="${course.name}"-->
-                                <!--                                    >-->
-                                <!--                                    </div>-->
-                                <!--                                </div>-->
-
                             </div>
 
                             <div
@@ -156,7 +167,7 @@
                             >
                                 <!-- Profile Edit Form -->
                                 <form id="profileForm" th:object="${user}" th:action="@{/user/update-user-profile}"
-                                      th:method="post">
+                                      method="post">
 
                                     <div class="row mb-3">
                                         <label
@@ -172,22 +183,24 @@
                                                     class="form-control"
                                                     id="fullName"
                                                     th:field="*{name}"
+                                                    required
                                             />
                                         </div>
                                     </div>
                                     <div class="row mb-3">
                                         <label
                                                 for="username"
-                                                class="col-md-4 col-lg-3 col-form-label"
+                                                class="col-md-4 col-lg-3 col-form-label d-none"
                                         >Username</label
                                         >
                                         <div class="col-md-8 col-lg-9">
                                             <input
                                                     name="username"
                                                     type="text"
-                                                    class="form-control"
+                                                    class="form-control d-none"
                                                     id="username"
                                                     th:field="*{username}"
+
                                             />
                                         </div>
                                     </div>
@@ -205,6 +218,7 @@
                                                     class="form-control"
                                                     id="email"
                                                     th:field="*{email}"
+                                                    required
                                             />
                                         </div>
                                     </div>
@@ -220,7 +234,8 @@
 
                             <div class="tab-pane fade pt-3" id="profile-change-password">
                                 <!-- Change Password Form -->
-                                <form>
+                                <form th:action="@{/user/change-password}" method="post">
+                                    <input type="hidden" name="id" th:field="*{user.id}"/>
                                     <div class="row mb-3">
                                         <label
                                                 for="currentPassword"
@@ -229,10 +244,11 @@
                                         >
                                         <div class="col-md-8 col-lg-9">
                                             <input
-                                                    name="password"
+                                                    name="currentPassword"
                                                     type="password"
                                                     class="form-control"
                                                     id="currentPassword"
+                                                    placeholder="12345"
                                             />
 
                                         </div>
@@ -246,10 +262,11 @@
                                         >
                                         <div class="col-md-8 col-lg-9">
                                             <input
-                                                    name="newpassword"
+                                                    name="newPassword"
                                                     type="password"
                                                     class="form-control"
                                                     id="newPassword"
+                                                    required
                                             />
 
                                         </div>
@@ -263,10 +280,11 @@
                                         >
                                         <div class="col-md-8 col-lg-9">
                                             <input
-                                                    name="renewpassword"
+                                                    name="renewPassword"
                                                     type="password"
                                                     class="form-control"
                                                     id="renewPassword"
+                                                    required
                                             />
                                         </div>
                                     </div>

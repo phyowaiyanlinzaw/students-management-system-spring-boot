@@ -32,6 +32,7 @@ public class SecurityConfig {
                                         "/fragments/**"
                                 ).permitAll()
                                 .requestMatchers("/student/**").hasAnyRole("TEACHER")
+                                .requestMatchers("/user/profile","/user/update-user-profile","/user/change-password","/user/report/**").hasAnyRole("TEACHER")
                                 .requestMatchers("/user/**").hasRole("ADMIN")
                                 .requestMatchers("/").authenticated()
                                 .anyRequest().authenticated()

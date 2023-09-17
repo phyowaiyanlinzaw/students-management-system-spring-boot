@@ -50,11 +50,14 @@ public class StudentController {
             ){
 
 
+         UUID randomUUID= UUID.randomUUID();
+
         try{
             if (!file.isEmpty()){
-                file.transferTo(Path.of("src/main/resources/static/images/"+ UUID.randomUUID()+"_"+file.getOriginalFilename()));
+                file.transferTo(Path.of("src/main/resources/static/images/"+randomUUID+"_"+file.getOriginalFilename()));
             }
-            student.setPhotoPath("/images/"+file.getOriginalFilename());
+            student.setPhotoPath("/images/"+randomUUID+"_"+file.getOriginalFilename());
+            student.setEnabled(true);
             studentService.save(student);
             redirectAttributes.addFlashAttribute("success","studentAddSuccess");
         }   catch (DataIntegrityViolationException e){
@@ -78,12 +81,28 @@ public class StudentController {
     }
 
     @PostMapping("/edit")
-    public String studentEdit(@ModelAttribute("student") Student student){
+    public String studentEdit(
+            @ModelAttribute("student") Student student,
+            RedirectAttributes redirectAttributes,
+            @RequestParam("photo") MultipartFile file
+    ){
+        try{
+            UUID randomUUID =UUID.randomUUID();
+            if (!file.isEmpty()){
+                file.transferTo(Path.of("src/main/resources/static/images/"+randomUUID+"_"+file.getOriginalFilename()));
+            }
+            student.setPhotoPath("/images/"+randomUUID+"_"+file.getOriginalFilename());
+            student.setEnabled(true);
+            studentService.save(student);
+            redirectAttributes.addFlashAttribute("success","studentEditSuccess");
+        }   catch (DataIntegrityViolationException e){
+            redirectAttributes.addFlashAttribute("error","studentDupeError");
+            return "redirect:/student/edit/"+student.getId().toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         return "redirect:/student/list";
     }
 
-    @GetMapping("/delete")
-    public String deleteStudent(){
-        return "redirect:/student/list";
-    }
 }

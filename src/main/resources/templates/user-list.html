@@ -60,7 +60,15 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Users</h5>
+                        <div class="row">
+                            <div class="col-6">
+                                <h5 class="card-title">Users</h5>
+                            </div>
+                            <div class="col-6 text-end">
+                                <a th:href="@{/user/report/pdf}"><span class="badge bg-success">Generate PDF</span></a>
+                                <a th:href="@{/user/report/excel}"><span class="badge bg-success">Generate Excel</span></a>
+                            </div>
+                        </div>
                         <div th:if="${success eq 'userEnableSuccess'}"
                              class="alert alert-success alert-dismissible fade show" role="alert">
                             <strong>Success!</strong> User has been enabled.

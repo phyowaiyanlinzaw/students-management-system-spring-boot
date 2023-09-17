@@ -64,7 +64,8 @@
                                 <h5 class="card-title">Students</h5>
                             </div>
                             <div class="col-6 text-end">
-                                <button class="btn btn-primary mt-3">Generate Report</button>
+                                <button class="btn btn-primary mt-3">Generate PDF</button>
+                                <button class="btn btn-primary mt-3">Generate EXCEL</button>
                             </div>
                         </div>
                         <div class="alert alert-success alert-dismissible d-none" role="alert" id="enableSuccessAlert">
@@ -87,7 +88,6 @@
                         <table class="display" id="students">
                             <thead>
                             <tr>
-                                <th scope="col">#</th>
                                 <th scope="col">Code</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Photo</th>
@@ -124,7 +124,6 @@
             processing: true,
 
             columns: [
-                {data: 'id'},
                 { data: 'code' },
                 { data: 'name' },
                 {

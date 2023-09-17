@@ -1,15 +1,21 @@
 package com.ojt.StudentsBoot.controller;
 
 import com.ojt.StudentsBoot.model.Course;
+import com.ojt.StudentsBoot.model.CustomerUserDetails;
 import com.ojt.StudentsBoot.model.Role;
 import com.ojt.StudentsBoot.model.User;
 import com.ojt.StudentsBoot.service.CourseService;
 import com.ojt.StudentsBoot.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -79,22 +85,17 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String profileView(
-            Principal principal,
-            ModelMap modelMap
-            ){
+    public String profileView(ModelMap modelMap, Principal principal) {
+
+        // Get the currently authenticated user
         String username = principal.getName();
         User user = userService.getUserByUsername(username);
 
-        if (user == null) {
-            // Handle the case where the user is not found
-            modelMap.addAttribute("error", "userNotFound");
-            return "user-profile"; // You may want to return an error page or handle this case differently
-        }
-
         modelMap.addAttribute("user",user);
-        return "user-profile";
+
+        return "user-profile"; // You may want to return an error page or handle this case differently
     }
+
 
     @PostMapping("/update-user-profile")
     public String processUserProfile(
@@ -110,11 +111,46 @@ public class UserController {
             userService.save(user);
             redirectAttributes.addFlashAttribute("success","userEditSuccess");
         }catch (DataIntegrityViolationException e){
-            modelMap.addAttribute("error","userDupe");
-            return "user-profile";
+            redirectAttributes.addFlashAttribute("error","userDupe");
+            return "redirect:/user/profile";
+        }
+
+        return "redirect:/user/profile";
+    }
+
+    @PostMapping("/change-password")
+    public String changePassword(
+            @RequestParam("currentPassword") String currentPw,
+            @RequestParam("newPassword") String pw,
+            @RequestParam("renewPassword") String rePw,
+            @RequestParam("id") Long id,
+            RedirectAttributes redirectAttributes,
+            ModelMap modelMap
+    ){
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        User userFromDb = userService.getUserById(id);
+        if(pw.equals(rePw)&&bCryptPasswordEncoder.matches(currentPw,userFromDb.getPassword())){
+            userFromDb.setPassword(bCryptPasswordEncoder.encode(pw));
+            userService.save(userFromDb);
+            redirectAttributes.addFlashAttribute("success","changePwSuccess");
+        }else{
+            redirectAttributes.addFlashAttribute("error","changePwError");
+            return "redirect:/user/profile";
         }
 
 
-        return "user-profile";
+        return "redirect:/user/profile";
+    }
+
+    @GetMapping("/report/pdf")
+    public String exportPdfFile(HttpServletResponse response){
+        userService.generatePdf(response);
+        return "redirect:/user/list";
+    }
+
+    @GetMapping("/report/excel")
+    public String exportExcelFile(HttpServletResponse response){
+        userService.generateExcel(response);
+        return "redirect:/user/list";
     }
 }

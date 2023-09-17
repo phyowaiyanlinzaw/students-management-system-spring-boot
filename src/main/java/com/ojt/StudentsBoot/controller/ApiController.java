@@ -69,4 +69,17 @@ public class ApiController {
         return ResponseEntity.ok("User status toggled successfully");
     }
 
+    @PostMapping("/toggle-course-active/{id}")
+    public ResponseEntity<String> toggleCourseActive(@PathVariable Long id, @RequestParam Boolean status) {
+        Course course = courseService.getCourseById(id);
+        if (course == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        course.setEnabled(status);
+        courseService.save(course);
+
+        return ResponseEntity.ok("User status toggled successfully");
+    }
+
 }

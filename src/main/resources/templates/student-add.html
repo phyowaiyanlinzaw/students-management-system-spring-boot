@@ -49,8 +49,8 @@
     <!-- End Page Title -->
 
     <section class="section profile">
-        <div th:if="${error eq 'studentDupe'}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            Student Already Exists!
+        <div th:if="${error eq 'studentDupeError'}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            Student with this phone number Already Exists!
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <div th:if="${success eq 'studentAddSuccess'}" class="alert alert-success alert-dismissible fade show" role="alert">
@@ -137,6 +137,7 @@
                                                 class="form-control"
                                                 id="name"
                                                 required
+                                                th:field="*{name}"
                                         />
                                     </div>
                                 </div>
@@ -153,6 +154,9 @@
                                                     type="radio"
                                                     value="male"
                                                     id="male"
+                                                    th:field="*{gender}"
+                                                    name="gender"
+                                                    required
                                             />
                                             <label for="male">Male</label>
                                         </div>
@@ -162,6 +166,9 @@
                                                     type="radio"
                                                     value="female"
                                                     id="female"
+                                                    th:field="*{gender}"
+                                                    name="gender"
+                                                    required
                                             />
                                             <label for="female">Female</label>
                                         </div>
@@ -171,6 +178,9 @@
                                                     type="radio"
                                                     value="others"
                                                     id="others"
+                                                    th:field="*{gender}"
+                                                    name="gender"
+                                                    required
                                             />
                                             <label for="others">Others</label>
                                         </div>
@@ -192,6 +202,9 @@
                                                 class="form-control"
                                                 id="dob"
                                                 required
+                                                th:field="*{dob}"
+                                                min="1990-12-31"
+                                                max="2008-12-31"
                                         />
                                     </div>
                                 </div>
@@ -208,8 +221,9 @@
                                                 type="text"
                                                 class="form-control"
                                                 id="Phone"
-                                                placeholder="+959123456789"
+                                                placeholder="09123456789"
                                                 required
+                                                th:field="*{phone}"
                                         />
                                     </div>
                                 </div>
@@ -226,8 +240,8 @@
                                                 class="form-select"
                                                 id="education"
                                                 required
+                                                th:field="*{education}"
                                         >
-                                            <option selected>Select Education</option>
                                             <option value="High School Graduate">High School Graduate</option>
                                             <option value="College Diploma">College Diploma</option>
                                             <option value="Bachelor">Bachelor</option>
@@ -250,6 +264,7 @@
                                                        id="courses"
                                                        class="form-check-input"
                                                        th:value="${course.id}"
+                                                       th:field="*{courses}"
                                                 />
                                                 <label for="courses" class="form-check-label"
                                                        th:text="${course.courseName}"></label>
@@ -286,7 +301,25 @@
         const fileInput = document.getElementById('fileInput');
         const fileNameDisplay = document.getElementById('fileNameDisplay');
         const imageDisplay = document.getElementById('imageDisplay');
-        const removeImageButton = document.getElementById('removeImageButton'); //
+        const removeImageButton = document.getElementById('removeImageButton');
+        const phoneInput = document.getElementById('Phone');
+
+        phoneInput.addEventListener("input",validate);
+
+        function validate() {
+            const phoneValue = phoneInput.value;
+            const phoneValueTrim = phoneValue.trim();
+            const phonePattern = /^09\d{9}$/;
+
+            if (phoneValueTrim.length === 0) {
+                phoneInput.setCustomValidity("Phone number is required")
+            } else if (!phonePattern.test(phoneValueTrim)) {
+                phoneInput.setCustomValidity("Phone number is invalid")
+            }else {
+                phoneInput.setCustomValidity("")
+            }
+
+        }
 
         uploadButton.addEventListener('click', function (e) {
             // Prevent the default behavior of the anchor link

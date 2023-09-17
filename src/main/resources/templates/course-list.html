@@ -74,6 +74,15 @@
                     <div class="card-body">
                         <h5 class="card-title">Courses</h5>
                         <!-- Conditionally display alert -->
+                        <div class="alert alert-success alert-dismissible d-none" role="alert" id="enableSuccessAlert">
+                            <strong>Success!</strong> Student has been enabled.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <div class="alert alert-success alert-dismissible d-none" role="alert" id="disableSuccessAlert">
+                            <strong>Success!</strong> Student has been disabled.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                         <div th:if="${success eq 'courseEditSuccess'}"
                              class="alert alert-success alert-dismissible fade show" role="alert">
                             Course edited successfully!
@@ -157,11 +166,19 @@
         }).on('click', '.toggle-course', function () {
             const courseId = $(this).data('course-id');
             const newStatus = $(this).data('status');
+            const successAlertId = newStatus ? '#enableSuccessAlert' : '#disableSuccessAlert';
 
             $.ajax({
                 url: '/api/toggle-course-active/' + courseId + '?status=' + newStatus,
                 type: 'POST',
                 success: function (data) {
+
+                    // Show the success alert
+                    $(successAlertId).removeClass('d-none');
+                    // Set a timeout to hide the alert after a few seconds (e.g., 5 seconds)
+                    setTimeout(function () {
+                        $(successAlertId).addClass('d-none');
+                    }, 5000); // 5000 milliseconds (5 seconds)
                     // Refresh the DataTable
                     $('#courses').DataTable().ajax.reload();
                 },

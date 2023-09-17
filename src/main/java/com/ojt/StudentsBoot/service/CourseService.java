@@ -27,7 +27,6 @@ public class CourseService {
 
     public void save(Course course){
         course.setCourseStartDate(new Timestamp(System.currentTimeMillis()));
-        course.setEnabled(false);
         courseRepository.save(course);
     }
 
@@ -53,5 +52,9 @@ public class CourseService {
 
     public List<Course> findByTeacher(User teacher){
         return courseRepository.findCoursesByTeacher(teacher);
+    }
+
+    public Course getCourseById(Long id){
+        return courseRepository.findById(id).orElse(null);
     }
 }

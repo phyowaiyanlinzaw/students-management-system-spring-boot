@@ -51,6 +51,7 @@ public class CourseController {
     @PostMapping("/add")
     public String courseAdd(@ModelAttribute Course course, RedirectAttributes redirectAttributes) {
         try{
+            course.setEnabled(true);
             courseService.save(course);
             redirectAttributes.addFlashAttribute("success", "courseAddSuccess");
         }catch (DataIntegrityViolationException e){

@@ -32,9 +32,6 @@ public class User{
     private String email;
 
 
-    @Lob
-    private byte[] image;
-
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
