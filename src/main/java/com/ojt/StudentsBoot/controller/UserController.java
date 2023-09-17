@@ -1,9 +1,15 @@
 package com.ojt.StudentsBoot.controller;
 
+import com.ojt.StudentsBoot.model.Course;
+import com.ojt.StudentsBoot.model.Role;
 import com.ojt.StudentsBoot.model.User;
+import com.ojt.StudentsBoot.service.CourseService;
 import com.ojt.StudentsBoot.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -11,12 +17,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 
     private final UserService userService;
+    private final CourseService courseService;
 
     @GetMapping("/list")
     public String users(){
@@ -67,34 +78,43 @@ public class UserController {
         return "redirect:/user/list";
     }
 
-    @GetMapping("/disable/{id}")
-    public String processUserDelete(
-            @PathVariable Long id,
-            RedirectAttributes redirectAttributes
-    ){
-        System.out.print("In Disabled URL");
-        User user = userService.getUserById(id);
-        user.setEnabled(false);
-        userService.save(user);
-        redirectAttributes.addFlashAttribute("success", "userDisableSuccess");
-        return "redirect:/user/list";
-    }
-
-    @GetMapping("/toggle-active/{id}+{status}")
-    public String processUserEnable(
-            @PathVariable Long id,
-            @PathVariable Boolean status,
-            RedirectAttributes redirectAttributes
-    ){
-        User user = userService.getUserById(id);
-        user.setEnabled(status);
-        userService.save(user);
-        redirectAttributes.addFlashAttribute("success", "userEnableSuccess");
-        return "redirect:/user/list";
-    }
-
     @GetMapping("/profile")
-    public ModelAndView profileView(){
-        return new ModelAndView("user-profile","user",new User());
+    public String profileView(
+            Principal principal,
+            ModelMap modelMap
+            ){
+        String username = principal.getName();
+        User user = userService.getUserByUsername(username);
+
+        if (user == null) {
+            // Handle the case where the user is not found
+            modelMap.addAttribute("error", "userNotFound");
+            return "user-profile"; // You may want to return an error page or handle this case differently
+        }
+
+        modelMap.addAttribute("user",user);
+        return "user-profile";
+    }
+
+    @PostMapping("/update-user-profile")
+    public String processUserProfile(
+            @ModelAttribute("user") User user,
+            RedirectAttributes redirectAttributes,
+            ModelMap modelMap
+    ){
+        try{
+            User userFromDB = userService.getUserById(user.getId());
+            user.setRoles(userFromDB.getRoles());
+            user.setPassword(userFromDB.getPassword());
+            user.setEnabled(userFromDB.isEnabled());
+            userService.save(user);
+            redirectAttributes.addFlashAttribute("success","userEditSuccess");
+        }catch (DataIntegrityViolationException e){
+            modelMap.addAttribute("error","userDupe");
+            return "user-profile";
+        }
+
+
+        return "user-profile";
     }
 }

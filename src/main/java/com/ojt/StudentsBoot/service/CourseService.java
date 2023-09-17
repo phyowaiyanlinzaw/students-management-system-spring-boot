@@ -1,6 +1,7 @@
 package com.ojt.StudentsBoot.service;
 
 import com.ojt.StudentsBoot.model.Course;
+import com.ojt.StudentsBoot.model.User;
 import com.ojt.StudentsBoot.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
@@ -50,5 +51,7 @@ public class CourseService {
         return courseRepository.findCoursesByEnabledTrue();
     }
 
-
+    public List<Course> findByTeacher(User teacher){
+        return courseRepository.findCoursesByTeacher(teacher);
+    }
 }

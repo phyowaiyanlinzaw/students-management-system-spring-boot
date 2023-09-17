@@ -1,35 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 
-  <title>User Profile | Students Management System</title>
-  <meta content="" name="description"/>
-  <meta content="" name="keywords"/>
+    <title>User Profile | Students Management System</title>
+    <meta content="" name="description"/>
+    <meta content="" name="keywords"/>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.gstatic.com" rel="preconnect"/>
-  <link
-          href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-          rel="stylesheet"
-  />
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link
+            href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+            rel="stylesheet"
+    />
 
-  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
 
-  <!-- Favicons -->
-  <link th:href="@{/images/favicon.png}" rel="icon">
-  <link th:href="@{/images/apple-touch-icon.png}" rel="apple-touch-icon">
+    <!-- Favicons -->
+    <link th:href="@{/images/favicon.png}" rel="icon">
+    <link th:href="@{/images/apple-touch-icon.png}" rel="apple-touch-icon">
 
-  <link
-          th:href="@{/vendor/bootstrap-icons/bootstrap-icons.css}"
-          rel="stylesheet"
-  />
-  <link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"/>
-  <link href="/vendor/remixicon/remixicon.css" rel="stylesheet"/>
+    <link
+            th:href="@{/vendor/bootstrap-icons/bootstrap-icons.css}"
+            rel="stylesheet"
+    />
+    <link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"/>
+    <link href="/vendor/remixicon/remixicon.css" rel="stylesheet"/>
 
-  <!-- Template Main CSS File -->
-  <link href="/css/style.css" rel="stylesheet"/>
+    <!-- Template Main CSS File -->
+    <link href="/css/style.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -51,6 +51,12 @@
     </div>
     <!-- End Page Title -->
 
+    <div th:if="${success eq 'userEditSuccess'}"
+         class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success!</strong> User profile updated successfully.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
     <section class="section profile">
         <div class="row">
             <div class="col-xl-4">
@@ -58,13 +64,14 @@
                     <div
                             class="card-body profile-card pt-4 d-flex flex-column align-items-center"
                     >
-                        <img
-                                src="assets/img/profile-img.jpg"
-                                alt="Profile"
-                                class="rounded-circle"
-                        />
-                        <h2>Phyo Phyo Lay</h2>
-                        <h3>Superman</h3>
+                        <div class="rounded-circle">
+                            <img
+                                    src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                                    alt="User"
+                            />
+                        </div>
+                        <h2 sec:authentication="principal.username"></h2>
+                        <h3 sec:authentication="principal.authorities"></h3>
                     </div>
                 </div>
             </div>
@@ -76,6 +83,7 @@
                         <ul class="nav nav-tabs nav-tabs-bordered">
                             <li class="nav-item">
                                 <button
+                                        id="overviewTab"
                                         class="nav-link active"
                                         data-bs-toggle="tab"
                                         data-bs-target="#profile-overview"
@@ -113,44 +121,33 @@
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Full Name</div>
-                                    <div class="col-lg-9 col-md-8">Kevin Anderson</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Company</div>
-                                    <div class="col-lg-9 col-md-8">
-                                        Lueilwitz, Wisoky and Leuschke
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Job</div>
-                                    <div class="col-lg-9 col-md-8">Web Designer</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Country</div>
-                                    <div class="col-lg-9 col-md-8">USA</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Address</div>
-                                    <div class="col-lg-9 col-md-8">
-                                        A108 Adam Street, New York, NY 535022
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Phone</div>
-                                    <div class="col-lg-9 col-md-8">(436) 486-3538 x29071</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${user.name}"></div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Email</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${user.email}"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Role</div>
                                     <div class="col-lg-9 col-md-8">
-                                        k.anderson@example.com
+                                        <span th:each="role, iterStat : ${user.roles}">
+            <span th:text="${role.name}"></span>
+            <span th:unless="${iterStat.last}">,</span>
+        </span>
                                     </div>
                                 </div>
+
+                                <!--                                <div class="row">-->
+                                <!--                                    <div class="col-lg-3 col-md-4 label">Teaches</div>-->
+                                <!--                                    <div class="col-lg-9 col-md-8"-->
+                                <!--                                            th:each="course :${ user.courses}"-->
+                                <!--                                            th:text="${course.name}"-->
+                                <!--                                    >-->
+                                <!--                                    </div>-->
+                                <!--                                </div>-->
+
                             </div>
 
                             <div
@@ -158,30 +155,8 @@
                                     id="profile-edit"
                             >
                                 <!-- Profile Edit Form -->
-                                <form>
-                                    <div class="row mb-3">
-                                        <label
-                                                class="col-md-4 col-lg-3 col-form-label"
-                                        >Profile Image</label
-                                        >
-                                        <div class="col-md-8 col-lg-9">
-                                            <img src="" alt="Profile"/>
-                                            <div class="pt-2">
-                                                <a
-                                                        href="#"
-                                                        class="btn btn-primary btn-sm"
-                                                        title="Upload new profile image"
-                                                ><i class="bi bi-upload"></i
-                                                ></a>
-                                                <a
-                                                        href="#"
-                                                        class="btn btn-danger btn-sm"
-                                                        title="Remove my profile image"
-                                                ><i class="bi bi-trash"></i
-                                                ></a>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <form id="profileForm" th:object="${user}" th:action="@{/user/update-user-profile}"
+                                      th:method="post">
 
                                     <div class="row mb-3">
                                         <label
@@ -190,117 +165,50 @@
                                         >Full Name</label
                                         >
                                         <div class="col-md-8 col-lg-9">
+                                            <input type="hidden" name="id" th:field="*{id}"/>
                                             <input
                                                     name="fullName"
                                                     type="text"
                                                     class="form-control"
                                                     id="fullName"
-                                                    value="Kevin Anderson"
+                                                    th:field="*{name}"
                                             />
                                         </div>
                                     </div>
-
                                     <div class="row mb-3">
                                         <label
-                                                for="company"
+                                                for="username"
                                                 class="col-md-4 col-lg-3 col-form-label"
-                                        >Company</label
+                                        >Username</label
                                         >
                                         <div class="col-md-8 col-lg-9">
                                             <input
-                                                    name="company"
+                                                    name="username"
                                                     type="text"
                                                     class="form-control"
-                                                    id="company"
-                                                    value="Lueilwitz, Wisoky and Leuschke"
+                                                    id="username"
+                                                    th:field="*{username}"
                                             />
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
                                         <label
-                                                for="Job"
-                                                class="col-md-4 col-lg-3 col-form-label"
-                                        >Job</label
-                                        >
-                                        <div class="col-md-8 col-lg-9">
-                                            <input
-                                                    name="job"
-                                                    type="text"
-                                                    class="form-control"
-                                                    id="Job"
-                                                    value="Web Designer"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label
-                                                for="Country"
-                                                class="col-md-4 col-lg-3 col-form-label"
-                                        >Country</label
-                                        >
-                                        <div class="col-md-8 col-lg-9">
-                                            <input
-                                                    name="country"
-                                                    type="text"
-                                                    class="form-control"
-                                                    id="Country"
-                                                    value="USA"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label
-                                                for="Address"
-                                                class="col-md-4 col-lg-3 col-form-label"
-                                        >Address</label
-                                        >
-                                        <div class="col-md-8 col-lg-9">
-                                            <input
-                                                    name="address"
-                                                    type="text"
-                                                    class="form-control"
-                                                    id="Address"
-                                                    value="A108 Adam Street, New York, NY 535022"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label
-                                                for="Phone"
-                                                class="col-md-4 col-lg-3 col-form-label"
-                                        >Phone</label
-                                        >
-                                        <div class="col-md-8 col-lg-9">
-                                            <input
-                                                    name="phone"
-                                                    type="text"
-                                                    class="form-control"
-                                                    id="Phone"
-                                                    value="(436) 486-3538 x29071"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label
-                                                for="Email"
+                                                for="email"
                                                 class="col-md-4 col-lg-3 col-form-label"
                                         >Email</label
                                         >
                                         <div class="col-md-8 col-lg-9">
                                             <input
                                                     name="email"
-                                                    type="email"
+                                                    type="text"
                                                     class="form-control"
-                                                    id="Email"
-                                                    value="k.anderson@example.com"
+                                                    id="email"
+                                                    th:field="*{email}"
                                             />
                                         </div>
                                     </div>
+
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-primary">
                                             Save Changes
@@ -326,6 +234,7 @@
                                                     class="form-control"
                                                     id="currentPassword"
                                             />
+
                                         </div>
                                     </div>
 
@@ -342,6 +251,7 @@
                                                     class="form-control"
                                                     id="newPassword"
                                             />
+
                                         </div>
                                     </div>
 
@@ -378,10 +288,11 @@
     </section>
 </main>
 <!-- End #main -->
-
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <!-- Vendor JS Files -->
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Template Main JS File -->
 <script src="/js/main.js"></script>
 </body>
+
 </html>

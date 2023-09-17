@@ -8,6 +8,8 @@
     <meta content="" name="description"/>
     <meta content="" name="keywords"/>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect"/>
     <link
@@ -49,7 +51,7 @@
     <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
             <div class="d-flex align-items-center">
-                <li class="nav-item text-black me-3"><span id="current-time"></span></li>
+                <li class="nav-item text-black me-3"><span id="currentTime"></span></li>
             </div>
             <div class="d-flex align-items-center">
                 <li class="nav-item text-black me-3">
@@ -97,8 +99,34 @@
 </header>
 <!-- End Header -->
 <!-- Vendor JS Files -->
+<script>
+    // Create a function to get the current time.
+    function getCurrentTime() {
+        // Get the current date and time.
+        const now = new Date();
+
+        // Get the hour, minute, and second.
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+
+        // Format the time to the desired format.
+        // Return the formatted time.
+        return `${hours}:${minutes}:${seconds}`;
+    }
+
+    // Update the currentTime element every second.
+    setInterval(() => {
+        const currentTimeElement = document.querySelector('#currentTime');
+        currentTimeElement.textContent = getCurrentTime();
+    }, 1000);
+</script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/js/main.js}"></script>
+<script src="/js/main.js"></script>
+
+
 </body>
+
+
 
 </html>
