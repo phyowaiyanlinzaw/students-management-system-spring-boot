@@ -72,7 +72,15 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Courses</h5>
+                        <div class="row">
+                            <div class="col-6">
+                                <h5 class="card-title">Courses</h5>
+                            </div>
+                            <div class="col-6 text-end">
+                                <button class="btn btn-primary mt-3" onclick="window.location='/course/report/pdf'">Generate PDF</button>
+                                <button class="btn btn-primary mt-3" onclick="window.location='/course/report/excel'">Generate EXCEL</button>
+                            </div>
+                        </div>
                         <!-- Conditionally display alert -->
                         <div class="alert alert-success alert-dismissible d-none" role="alert" id="enableSuccessAlert">
                             <strong>Success!</strong> Student has been enabled.

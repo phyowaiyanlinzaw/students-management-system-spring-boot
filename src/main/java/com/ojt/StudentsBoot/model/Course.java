@@ -32,5 +32,6 @@ public class Course {
     private List<Student> students = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "teacher_id")
     private User teacher;
 }

@@ -4,6 +4,7 @@ import com.ojt.StudentsBoot.model.Course;
 import com.ojt.StudentsBoot.model.User;
 import com.ojt.StudentsBoot.service.CourseService;
 import com.ojt.StudentsBoot.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -97,6 +98,18 @@ public class CourseController {
         course.setEnabled(false);
         courseService.save(course);
         redirectAttributes.addFlashAttribute("success", "courseEnableSuccess");
+        return "redirect:/course/list";
+    }
+
+    @GetMapping("/report/pdf")
+    public String exportPdfFile(HttpServletResponse response){
+        courseService.generatePdf(response);
+        return "redirect:/course/list";
+    }
+
+    @GetMapping("/report/excel")
+    public String exportExcelFile(HttpServletResponse response){
+        courseService.generateExcel(response);
         return "redirect:/course/list";
     }
 }

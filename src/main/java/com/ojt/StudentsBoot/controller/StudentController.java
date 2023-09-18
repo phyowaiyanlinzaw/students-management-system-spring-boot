@@ -3,6 +3,7 @@ package com.ojt.StudentsBoot.controller;
 import com.ojt.StudentsBoot.model.Student;
 import com.ojt.StudentsBoot.service.CourseService;
 import com.ojt.StudentsBoot.service.StudentService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -102,6 +103,18 @@ public class StudentController {
             throw new RuntimeException(e);
         }
 
+        return "redirect:/student/list";
+    }
+
+    @GetMapping("/report/pdf")
+    public String exportPdfFile(HttpServletResponse response){
+        studentService.generatePdf(response);
+        return "redirect:/student/list";
+    }
+
+    @GetMapping("/report/excel")
+    public String exportExcelFile(HttpServletResponse response){
+        studentService.generateExcel(response);
         return "redirect:/student/list";
     }
 
