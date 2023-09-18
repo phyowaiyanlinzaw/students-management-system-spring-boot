@@ -3,37 +3,33 @@ package com.ojt.StudentsBoot.controller;
 import com.ojt.StudentsBoot.model.Email;
 import com.ojt.StudentsBoot.service.EmailService;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class EmailController {
 
-    @Autowired
-     private EmailService emailService;
+     private final EmailService emailService;
 
 
     // Sending a simple Email
-    @PostMapping("/sendMail")
-    public String
-    sendMail(Email details)
+    @GetMapping("/sendMail")
+    public ResponseEntity<String>
+    sendMail()
     {
-        details.setSubject("LEE");
-        details.setMsgBody("LEE BODY");
-        details.setRecipient("pudgeismyfavourate@gmail.com");
-        return emailService.sendSimpleMail(details);
+        emailService.sendEmail(
+                "pudgeismyfavourate@gmail.com",
+                "Hello",
+                "This is a test email"
+        );
+        return ResponseEntity.ok("Email sent successfully");
     }
 
-    // Sending email with attachment
-    @PostMapping("/sendMailWithAttachment")
-    public String sendMailWithAttachment(
-            @RequestBody Email details)
-    {
-        details.setRecipient("pudgeismyfavourate@gmail.com");
-        return emailService.sendMailWithAttachment(details);
-    }
+
 }

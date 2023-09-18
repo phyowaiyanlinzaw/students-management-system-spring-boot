@@ -16,6 +16,11 @@ public class HomeController {
     private final CourseService courseService;
     private final StudentService studentService;
 
+    @GetMapping("/email")
+    public String email(){
+        return "email";
+    }
+
     @GetMapping(value = {"/","/dashboard"})
     public String home(ModelMap model){
         Long studentsCount = studentService.getStudentsCount();
