@@ -82,6 +82,4 @@ public class ApiController {
         return ResponseEntity.ok("User status toggled successfully");
     }
 
-
-
 }

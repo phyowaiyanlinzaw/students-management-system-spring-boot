@@ -8,46 +8,44 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body>
-<button id="send-button" class="btn btn-primary">Send Email</button>
-<div class="spinner-border text-primary" id="loading-spinner" style="display: none;"></div>
+<button class="btn btn-primary" type="button" id="send-button">
+    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+    Send Email
+</button>
+
 
 </body>
 <script>
-  $(document).ready(function () {
-    $("#send-button").click(function () {
-      // Show loading spinner
-      $("#loading-spinner").show();
+    $(document).ready(function () {
+        $("#send-button").click(function () {
+            // Show loading spinner and disable the button
+            $(this).prop("disabled", true);
+            $(this).find('.spinner-border').removeClass('d-none');
 
-      // Disable the button to prevent multiple clicks
-      $(this).prop("disabled", true);
+            // Send an AJAX request to the controller's action
+            $.ajax({
+                type: "GET",
+                url: "/request-otp", // The URL of your controller's action
+                success: function (response) {
+                    // Hide loading spinner and enable the button
+                    $("#send-button").prop("disabled", false);
+                    $("#send-button").find('.spinner-border').addClass('d-none');
 
-      // Send an AJAX request to the controller's action
-      $.ajax({
-        type: "GET",
-        url: "/sendMail", // The URL of your controller's action
-        success: function (response) {
-          // Hide loading spinner
-          $("#loading-spinner").hide();
+                    // Show success message (or handle errors here)
+                    alert("Email sent successfully!");
+                },
+                error: function (error) {
+                    // Hide loading spinner and enable the button
+                    $("#send-button").prop("disabled", false);
+                    $("#send-button").find('.spinner-border').addClass('d-none');
 
-          // Enable the button
-          $("#send-button").prop("disabled", false);
-
-          // Show success message (or handle errors here)
-          alert("Email sent successfully!");
-        },
-        error: function (error) {
-          // Hide loading spinner
-          $("#loading-spinner").hide();
-
-          // Enable the button
-          $("#send-button").prop("disabled", false);
-
-          // Handle error (e.g., display an error message)
-          alert("Error sending email: " + error.statusText);
-        }
-      });
+                    // Handle error (e.g., display an error message)
+                    alert("Error sending email: " + error.statusText);
+                }
+            });
+        });
     });
-  });
+
 </script>
 
 

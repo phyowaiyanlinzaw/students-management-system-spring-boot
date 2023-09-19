@@ -1,5 +1,6 @@
 package com.ojt.StudentsBoot.controller;
 
+import com.ojt.StudentsBoot.model.Otp;
 import com.ojt.StudentsBoot.service.CourseService;
 import com.ojt.StudentsBoot.service.StudentService;
 import com.ojt.StudentsBoot.service.UserService;
@@ -7,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,5 +43,10 @@ public class HomeController {
     @GetMapping("/accessDenied")
     public String accessDenied(){
         return "pages-error-404";
+    }
+
+    @GetMapping("/forget-password/request")
+    public ModelAndView forgetPassword(ModelMap model){
+        return new ModelAndView("forget-password", "otp",new Otp());
     }
 }

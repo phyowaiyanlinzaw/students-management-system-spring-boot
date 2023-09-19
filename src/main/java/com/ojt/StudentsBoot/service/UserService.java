@@ -7,6 +7,7 @@ import com.ojt.StudentsBoot.repository.RoleRepository;
 import com.ojt.StudentsBoot.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
@@ -29,6 +30,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
@@ -71,7 +73,6 @@ public class UserService implements UserDetailsService {
     public DataTablesOutput<User> findAll(DataTablesInput input) {
         return userRepository.findAll(input);
     }
-
 
     public List<User> getUserByRole(String role) {
         Role targetRole = roleRepository.findByName(role);
@@ -121,7 +122,7 @@ public class UserService implements UserDetailsService {
             response.getOutputStream().flush();
             response.getOutputStream().close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error generating PDF report", e);
             // Handle any exceptions here
         }
     }
@@ -163,9 +164,17 @@ public class UserService implements UserDetailsService {
                 exporter.exportReport();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error generating Excel report", e);
             // Handle any exceptions here
         }
     }
 
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsUserByEmail(email);
+    }
 }
