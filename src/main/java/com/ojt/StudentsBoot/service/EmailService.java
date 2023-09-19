@@ -16,7 +16,6 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
     private final OtpRepository otpRepository;
-    private final UserService userService;
 
     public void sendEmail(String to) {
         String generatedOtp = generateOtp();

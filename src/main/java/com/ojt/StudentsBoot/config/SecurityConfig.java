@@ -29,8 +29,7 @@ public class SecurityConfig {
                                         "/css/**",
                                         "/images/**",
                                         "/vendor/**",
-                                        "/fragments/**",
-                                        "/forget-password/**"
+                                        "/fragments/**"
                                 ).permitAll()
                                 .requestMatchers("/student/**").hasAnyRole("TEACHER")
                                 .requestMatchers("/user/profile","/user/update-user-profile","/user/change-password","/user/report/**").hasAnyRole("TEACHER")
